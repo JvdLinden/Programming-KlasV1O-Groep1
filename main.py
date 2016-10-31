@@ -4,13 +4,10 @@ from enum import Enum
 
 
 def registreren():
-    uID = randomID()
-    name = eval(input("Typ uw naam in: "))
-    while type(name) is not str:
-        name = eval(input("De invoer klopt niet. Typ uw naam in: "))
-    address = eval(input("Typ uw adres in (straatnaam, huisnummer, postcode): "))
-    while type(address) is not str:
-        address = eval(input("De invoer klopt niet. Typ uw adres in (straatnaam, huisnummer, postcode): "))
+    name = get_input("Typ uw volledige naam in: ", str)
+    street = get_input("Typ uw straatnaam in: ",str)
+    house_number = get_input("Typ uw huisnummer in: ", int)
+    postal_code = get_input("Typ uw straatnaam in: ", str)
     telnr = get_telephone_nr()
     securitycode = send_msg_to_nr(telnr)
     while input("Heeft u de code ontvangen? Y/N") == 'N':
@@ -20,8 +17,19 @@ def registreren():
         securitycode = send_msg_to_nr(telnr)
         print("Code klopt niet. Er wordt een nieuwe verstuurd.")
     print("Code klopt. Registratie voltooid.")
-    user = {'uID': uID, 'Name': name, 'Address': address, "Telnr": telnr}
+    user = {'name': name, 'street': street, 'house_number': house_number, 'postal_code': postal_code, 'phone_number': telnr}
     # Database.Insert(user)
+
+
+def get_input(console_output, typeof):
+    cmd_input = ""
+    try:
+        cmd_input = eval(input(console_output))  # Eval throws an exception when cmd_input
+        while type(cmd_input) is not typeof:
+            cmd_input = eval(input("De invoer klopt niet. " + console_output))
+    except:
+        pass
+    return cmd_input
 
 
 def get_telephone_nr():
@@ -63,3 +71,4 @@ def make_random_code(length, type_of_code):
         randomint = random.randint(0, len(randomizer))
         random_code.add(randomizer[randomint])
     return random_code
+registreren()
