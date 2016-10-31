@@ -20,7 +20,8 @@ def registreren():
         securitycode = send_msg_to_nr(telnr)
         print("Code klopt niet. Er wordt een nieuwe verstuurd.")
     print("Code klopt. Registratie voltooid.")
-    
+    user = {'uID': uID, 'Name': name, 'Address': address, "Telnr": telnr}
+    # Database.Insert(user)
 
 
 def get_telephone_nr():
