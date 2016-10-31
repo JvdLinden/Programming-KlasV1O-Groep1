@@ -3,6 +3,19 @@ import sqlite3
 con = sqlite3.connect('test.db')
 cur = con.cursor()
 
+# Onderstaande gebruiken voor een NIEUWE TABEL
+cur.execute('''CREATE TABLE IF NOT EXISTS testing
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                street TEXT NOT NULL,
+                house_number INT NOT NULL,
+                house_number_extra TEXT,
+                city TEXT NOT NULL,
+                postal_code TEXT NOT NULL,
+                phone_number INTEGER NOT NULL
+            )''')
+
 myDict = {
     'name':'naam1',
     'street':'straat2',
@@ -31,17 +44,7 @@ def createInsertQuery(inDict, table):
 myQuery = createInsertQuery(myDict, myTable)
 
 print(myQuery)
-# cur.execute('''CREATE TABLE testing
-#             (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                 name TEXT NOT NULL,
-#                 street TEXT NOT NULL,
-#                 house_number INT NOT NULL,
-#                 house_number_extra TEXT,
-#                 city TEXT NOT NULL,
-#                 postal_code TEXT NOT NULL,
-#                 phone_number INTEGER NOT NULL
-#             )''')
+
 
 cur.execute(myQuery)
 
