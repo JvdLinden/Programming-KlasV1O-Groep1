@@ -2,28 +2,42 @@ import string
 import random
 import re
 
+
 class CodeType:
+    """
+        TODO: ADD DOCUMENTATION HERE
+    """
     DIGITS, LETTERS, ALL = 0,1,2
 
 
-#CONSTANTS
+# CONSTANTS
 RANDOM_ID_LENGTH = 8
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
-def registreren():
-    u_id = randomID()
+
+def register(): # maybe we should change this name to a name that better explains what this functions does (e.g.: registerNewUser)
+    """TODO: ADD DOCUMENTATION HERE!
+
+    :return:
+    """
+    u_id = randomID() #Vague naming
+
+    # We'll have to reprogram the remainder of this function to adjust to the GUI
     name = get_input("Typ uw volledige naam in: ", "^[a-zA-Z. ]+$")
     street = get_input("Typ uw straatnaam in: ", "^[a-zA-Z. ]+$")
     house_number = get_input("Typ uw huisnummer in: ", "^\d+$")
     postal_code = get_input("Typ uw postcode in: ", "^\d{4}\w{2}$")
     telnr = get_input("Typ uw telefoonnummer in: 06-", "^\d{8}$")
+
     securitycode = send_msg_to_nr(telnr)
     while input("Heeft u de code ontvangen? Y/N: ") == 'N':  # check to ensure user got a message on his phone
         telnr = get_input("Typ uw telefoonnummer in: 06-", "^\d{8}$")
         securitycode = send_msg_to_nr(telnr)
+
     while securitycode != input("Voer de code in die naar uw telefoon gestuurd is: "):  # Security code invalid
         securitycode = send_msg_to_nr(telnr)
         print("Code klopt niet. Er wordt een nieuwe verstuurd.")
+
     print("Code klopt. Registratie voltooid.")
     user = {'uid': u_id,
             'name': name,
@@ -94,4 +108,4 @@ def make_random_code(length, type_of_code):
 
 
 # TEST CODE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE::::
-registreren()
+register()
