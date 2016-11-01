@@ -1,8 +1,14 @@
 import string
 import random
 import re
-from enum import Enum
 
+class CodeType:
+    DIGITS, LETTERS, ALL = 0,1,2
+
+
+#CONSTANTS
+RANDOM_ID_LENGTH = 8
+RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
 def registreren():
     u_id = randomID()
@@ -44,7 +50,7 @@ def get_input(console_output, pattern):  # this method receives what to output t
 
 
 def send_msg_to_nr(tel_nr):  # Sends an authentication message to the given number
-    code = make_random_code(6, CodeType.ALL)
+    code = make_random_code(RANDOM_CONFIRMATION_CODE_LENGTH, CodeType.ALL)
     # TELEGRAM SEND MESSAGE WITH 'code' IN IT RIIIIIIIIGHT HEEEEEEEEEEEEEEEERE
     print(code)
     # INSTEAD, IMMA USE THIS PRINT IN THE MEANWHILE
@@ -52,27 +58,40 @@ def send_msg_to_nr(tel_nr):  # Sends an authentication message to the given numb
 
 
 def randomID():
-    return make_random_code(8, CodeType.DIGITS)
+    """TODO: ADD DOCUMENTATION HERE
 
-
-class CodeType(Enum):
-    DIGITS = 0
-    LETTERS = 1
-    ALL = 2
+    :return:
+    """
+    return make_random_code(RANDOM_ID_LENGTH, CodeType.DIGITS)
 
 
 def make_random_code(length, type_of_code):
-    randomizer = ""
-    if type_of_code.value == 0:
-        randomizer = string.digits
-    elif type_of_code.value == 1:
-        randomizer = string.ascii_uppercase
-    elif type_of_code.value == 2:
-        randomizer = string.ascii_uppercase + string.digits
+    """TODO: ADD DOCUMENTATION HERE
+
+    :param length:
+    :param type_of_code:
+    :return:
+    """
+    # local variable to store the data type we want to randomize
+    _randomizer = ""
+
+    # Check if the Type of code refers to DIGITS only
+    if type_of_code == CodeType.DIGITS:
+        _randomizer = string.digits
+
+    # Check if the Type of code refers to LETTERS only
+    elif type_of_code == CodeType.LETTERS:
+        _randomizer = string.ascii_uppercase
+
+    # Check if the Type of code refers DIGITS and LETTERS combined
+    elif type_of_code == CodeType.ALL:
+        _randomizer = string.ascii_uppercase + string.digits
+
     random_code = ""
-    for i in range(0, length):
-        random_int = random.randint(0, len(randomizer) - 1)
-        random_code += randomizer[random_int]
+    for i in range(length):
+        random_code += _randomizer[random.randint(0,len(_randomizer) - 1)]
     return random_code
+
+
 # TEST CODE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE::::
 registreren()
