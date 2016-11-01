@@ -1,42 +1,43 @@
 import string
 import random
+import re
 from enum import Enum
 
 
 def registreren():
-    name = get_input("Typ uw volledige naam in: ", str)
-    street = get_input("Typ uw straatnaam in: ",str)
-    house_number = get_input("Typ uw huisnummer in: ", int)
-    postal_code = get_input("Typ uw postcode in: ", str)
-    telnr = get_telephone_nr()
+    uID = randomID()
+    name = get_input("Typ uw volledige naam in: ", "^[a-zA-Z. ]+$")
+    street = get_input("Typ uw straatnaam in: ", "^[a-zA-Z. ]+$")
+    house_number = get_input("Typ uw huisnummer in: ", "^\d+$")
+    postal_code = get_input("Typ uw postcode in: ", "^\d{4}\w{2}$")
+    telnr = get_input("Typ uw telefoonnummer in: 06-", "^\d{8}$")
     securitycode = send_msg_to_nr(telnr)
     while input("Heeft u de code ontvangen? Y/N: ") == 'N':
-        telnr = get_telephone_nr()
+        telnr = get_input("Typ uw telefoonnummer in: 06-", "^\d{8}$")
         securitycode = send_msg_to_nr(telnr)
     while securitycode != input("Voer de code in die naar uw telefoon gestuurd is: "):  # Security code invalid
         securitycode = send_msg_to_nr(telnr)
         print("Code klopt niet. Er wordt een nieuwe verstuurd.")
     print("Code klopt. Registratie voltooid.")
-    user = {'name': name, 'street': street, 'house_number': house_number, 'postal_code': postal_code, 'phone_number': telnr}
+    user = {'uid': uID,
+            'name': name,
+            'street': street,
+            'house_number': house_number,
+            'postal_code': postal_code,
+            'phone_number': telnr}
     # Database.Insert(user)
 
 
-def get_input(console_output, type_of_input):
+def get_input(console_output, pattern):
     cmd_input = ""
     try:
-        cmd_input = eval(input(console_output))  # Eval throws an exception when cmd_input is a string
-        while type(cmd_input) is not type_of_input:
-            cmd_input = eval(input("De invoer klopt niet. " + console_output))
+        cmd_input = input(console_output)  # Eval throws an exception when cmd_input is a string
+        while not re.match(pattern, cmd_input):
+            cmd_input = input("De invoer klopt niet. " + console_output)
+        cmd_input = eval(cmd_input)
     except:
         pass
     return cmd_input
-
-
-def get_telephone_nr():
-    telnr = input("Typ uw telefoonnummer in: 06-")
-    while type(eval(telnr)) is not int or len(telnr) != 8:
-        telnr = eval(input("De input klopt niet. Typ uw telefoonnummer in: 06-"))
-    return telnr
 
 
 def send_msg_to_nr(tel_nr):  # Sends an authentication message to the given number
@@ -67,7 +68,7 @@ def make_random_code(length, type_of_code):
         randomizer = string.ascii_uppercase + string.digits
     random_code = ""
     for i in range(0, length):
-        random_int = random.randint(0, len(randomizer))
+        random_int = random.randint(0, len(randomizer) - 1)
         random_code = random_code + randomizer[random_int]
     return random_code
 # TEST CODE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE::::
