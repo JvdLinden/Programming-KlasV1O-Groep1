@@ -42,6 +42,13 @@ class DatabaseHandler(object):
 
         return "INSERT INTO {0} ({1}) VALUES ({2})".format(table, ','.join(_checkedDict.keys()), ','.join(_checkedDict.values()))
 
+    def saveDatabase(self):
+        """This function allows another part of the application to save all buffered data.
+
+        :return: None
+        """
+        self.connection.commit()
+
     def runQuery(self, sql):
         """This function safely executes sql-queries
 

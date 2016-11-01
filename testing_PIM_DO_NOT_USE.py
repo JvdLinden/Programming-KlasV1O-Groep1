@@ -51,9 +51,6 @@ while running:
     #Verwerk nieuwe codes
     item = dictList[0]
 
-    for key in item:
-        print('{}:{}'.format(key, item[key]))
-
     update_v = item['uid']
     message = item['text']
 
@@ -64,7 +61,7 @@ while running:
     # REGISTER CODE SOMEWHERE
     if item['code'] == registerCode:
         _message = '*We* hebben [u](http://www.example.com/) geregisteerd, %s %c' % (registerName, chr(9989))
-        myTelegramHandler.sendMessageToUser(chat_id=item['id'], message=_message, parse_mode="HMTL")
+        myTelegramHandler.sendMessageToUser(chat_id=item['id'], message=_message)
 
 #
 # # testing Dictionary
