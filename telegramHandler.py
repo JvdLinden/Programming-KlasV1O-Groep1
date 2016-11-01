@@ -8,14 +8,16 @@ class TelegramHandler(object):
         self.bot = telepot.Bot(token)
         self.current_response = current_response
 
-    def sendMessageToUser(self, chat_id, message):
-        self.bot.sendMessage(chat_id, message)
+    def sendMessageToUser(self, chat_id, message, parse_mode):
+        self.bot.sendMessage(chat_id, message, parse_mode='Markdown')
 
     def getNewUpdates(self):
         return self.bot.getUpdates(self.current_response+1)
 
-    def getNextUpdate(self):
-        return self.bot.getUpdates(self.current_response+1,limit=1)
+    def getNextUpdate(self, current = 0):
+        if current == 0:
+            current = self.current_response + 1
+        return self.bot.getUpdates(current, limit=1)
 
     def handleUpdates(self, updates):
         _list = []
@@ -38,9 +40,9 @@ class TelegramHandler(object):
         if self.current_response < update_id:
             self.current_response = update_id
 
-        if text.startswith(CODE_HEADER_REGISTER):
+        code = None
 
+        if text.startswith(CODE_HEADER_REGISTER):
             code = text.strip(CODE_HEADER_REGISTER)
 
-            return {'code': code, 'id':chat_id}
-        return None
+        return {'code': code, 'id':chat_id, 'uid': update['update_id'], 'text': message['text']}
