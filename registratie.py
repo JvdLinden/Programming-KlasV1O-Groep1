@@ -28,14 +28,16 @@ def registreren():
     # Database.Insert(user)
 
 
-def get_input(console_output, pattern):
+def get_input(console_output, pattern):  # this method receives what to output to console and a regex pattern.
     cmd_input = ""
+    cmd_input = input(console_output)
+    while not re.match(pattern, cmd_input):
+        cmd_input = input("De invoer klopt niet. " + console_output)
     try:
-        cmd_input = input(console_output)
-        while not re.match(pattern, cmd_input):
-            cmd_input = input("De invoer klopt niet. " + console_output)
         cmd_input = eval(cmd_input)  # Eval throws an exception when cmd_input is a string, that's why we're using try.
     # Eval is only done at the end because we need the input as a string at first to successfully match it with a regex.
+    # Not using eval at all will not parse the input properly for our database.
+    # So although this is dirty code, it's the only way.
     except:
         pass
     return cmd_input
