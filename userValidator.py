@@ -1,6 +1,7 @@
 import tkinter
 from Handlers import DatabaseHandler, telegramHandler
 from ProjectData import Constants
+from Validate import make_random_code
 
 class UserValidator(object):
     """This is de UserValidator-class

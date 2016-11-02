@@ -1,13 +1,4 @@
-import string
-import random
-from enum import Enum
 from Validate import *
-
-class CodeType(Enum):
-    DIGITS = 0
-    LETTERS = 1
-    ALL = 2
-
 
 class Info(Enum):
     NAME = 0

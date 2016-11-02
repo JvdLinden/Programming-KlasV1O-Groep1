@@ -1,5 +1,7 @@
 import re
-
+from enum import Enum
+import string
+import random
 
 def string(gui_input):
     return re.match("[a-zA-Z.' ]+", gui_input)
@@ -16,7 +18,10 @@ def postcode(gui_input):
 def tel_nr(gui_input):
     return re.match("06-\d{8}$", gui_input)
 
-
+class CodeType(Enum):
+    DIGITS = 0
+    LETTERS = 1
+    ALL = 2
 
 # ToDo : Finish Comments / Documentation!
 def make_random_code(length, type_of_code):
