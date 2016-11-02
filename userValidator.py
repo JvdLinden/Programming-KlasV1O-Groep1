@@ -1,5 +1,5 @@
 import tkinter
-from Handlers import DatabaseHandler, telegramHandler
+from Handlers import telegramHandler
 from ProjectData import Constants
 
 
