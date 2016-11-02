@@ -3,12 +3,12 @@ from enum import Enum
 import registration
 from Validate import *
 
-
+# Todo - Add comments / documentation
 labels = ["Naam: ", "Straat: ", "Huisnummer: ", "Postcode: ", "Tel.nummer: "]
 # CONSTANTS
 TELEGRAM_BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 
-
+# Todo - Add comments / documentation
 class Info(Enum):
     NAME = 0
     STREET = 1
@@ -16,8 +16,13 @@ class Info(Enum):
     POSTAL_CODE = 3
     PHONE_NR = 4
 
-
+# Todo - Add comments / documentation
 def sub_personal_code(confirmation_code):
+    """
+
+    :param confirmation_code:
+    :return:
+    """
     # Default subscreen settings
     sub_window = Toplevel(master=registration_window)
     sub_window.lift()
@@ -30,8 +35,13 @@ def sub_personal_code(confirmation_code):
     submit_button = Button(sub_window, text="submit")
     submit_button.grid(row=1, column=1)
 
-
+# Todo - Add comments / documentation
 def sub_incorrect_data(incorrect_entry):
+    """
+
+    :param incorrect_entry:
+    :return:
+    """
     sub_window = Toplevel(master=registration_window)
     sub_window.title("Incorrecte invoer")
     sub_window.lift()
@@ -41,8 +51,13 @@ def sub_incorrect_data(incorrect_entry):
     incorrect_label.pack()
     ok_button.pack()
 
-
+# Todo - Add comments / documentation
 def check_entries(entries):
+    """
+
+    :param entries:
+    :return:
+    """
     # Method validates entries and throws a pop-up when something isn't noted properly.
     # Data starts out as dict with entries
     name = entries['name'].get()  # All the entries are converted to the input strings
@@ -64,8 +79,12 @@ def check_entries(entries):
       # With our data being valid we start a pop-up containing a security code to send to Telegram.
         sub_personal_code(registration.send_msg_to_nr(phone_number))
 
-
+# Todo - Add comments / documentation
 def registration_init():
+    """
+
+    :return:
+    """
     # Default settings:
     global registration_window
     registration_window = Tk()

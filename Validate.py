@@ -3,21 +3,23 @@ from enum import Enum
 import string as stringImport
 import random
 
+# Todo - Add comments / documentation
 def string(gui_input):
     return re.match("[a-zA-Z.' ]+", gui_input)
 
-
+# Todo - Add comments / documentation
 def huis_nr(gui_input):
     return re.match("\d+", gui_input)
 
-
+# Todo - Add comments / documentation
 def postcode(gui_input):
     return re.match("\d{4}\w{2}", gui_input)
 
-
+# Todo - Add comments / documentation
 def tel_nr(gui_input):
     return re.match("06-\d{8}$", gui_input)
 
+# Todo - Add comments / documentation
 class CodeType(Enum):
     DIGITS = 0
     LETTERS = 1

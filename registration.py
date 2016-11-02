@@ -1,5 +1,6 @@
 from Validate import *
 
+# Todo - Add comments / documentation
 class Info(Enum):
     NAME = 0
     STREET = 1
