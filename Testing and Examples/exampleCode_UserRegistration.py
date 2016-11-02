@@ -40,6 +40,11 @@ identificationDict = {}
 #start our main loop
 while loopIsRunning:
 
+    #check if there are any updates available
+    if not tHandler.hasNewUpdates():
+        time.sleep(1)
+        continue #skip this cycle
+
     #request new updates
     newUpdates = tHandler.getNewUpdates() #this code will either return all buffered updates, if there are no updates, it will wait for the next update
 
