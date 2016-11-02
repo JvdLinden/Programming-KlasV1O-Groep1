@@ -63,17 +63,19 @@ class UserValidator(object):
         # verwijder database instantie
         del _databaseHandler
 
-        self.__hasEnteredValidPersonalCode = True
+        if telegramChatCode:
+            self.__hasEnteredValidPersonalCode = True
 
-        _telegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
+            _telegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
 
-        #Todo: Importeren Random Code genrator
-        self.__randomCode = 'QWERTY' # Todo <----- Here!
+            #Todo: Importeren Random Code genrator
+            self.__randomCode = 'QWERTY' # Todo <----- Here!
 
-        _telegramHandler.sendMessageToUser(telegramChatCode, self.__randomCode)
+            _telegramHandler.sendMessageToUser(telegramChatCode, self.__randomCode)
 
-        _newMessage = 'Geef de ontvangen code a.u.b. in'
-        self._labelMessage.configure(text=_newMessage)
+            _newMessage = 'Geef de ontvangen code a.u.b. in'
+            self._labelMessage.configure(text=_newMessage)
+
         self._entryPersonalCode.delete(0, tkinter.END)
 
 
