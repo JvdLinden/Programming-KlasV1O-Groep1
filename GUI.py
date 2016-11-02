@@ -1,6 +1,7 @@
 from tkinter import *
 from enum import Enum
 import registration
+import validate
 
 
 entries = []
@@ -19,18 +20,21 @@ class Info(Enum):
 def sub_personal_code():
     # Default subscreen settings
     sub_window = Toplevel(master=registration_window)
+    sub_window.lift()
     sub_window.title("Popup")
 
     # Widget creation
     code_label = Label(sub_window, text="Voer de ontvangen code in: ").grid(row=0, sticky=W)
     code_entry = Entry(sub_window,)
     code_entry.grid(row=0, column=1)
-    submit_button = Button(sub_window, text="submit", command=check_code(code_entry.get(), sub_window)).grid(row=1, column=1)
+    submit_button = Button(sub_window, text="submit", command=check_code(code_entry.get(), sub_window))
+    submit_button.grid(row=1, column=1)
 
 
 def sub_incorrect_data(incorrect_entry):
     sub_window = Toplevel(master=registration_window)
     sub_window.title("Incorrecte invoer")
+    sub_window.lift()
 
     incorrect_label = Label(sub_window, text="De invoer is incorrect. Voer uw %s in." % incorrect_entry)
     ok_button = Button(sub_window, text="OK", command=sub_window.destroy)
@@ -52,13 +56,21 @@ def check_entries(entries):
     house_number = entries['house_number'].get()
     postal_code = entries['postal_code'].get()
     phone_number = entries['phone_number'].get()
-
-    if True:  # With our data being valid we start a pop-up to ask for a security code sent to your phone.
+    if not validate.string(name):
+        sub_incorrect_data('naam')
+    elif not validate.string(street):
+        sub_incorrect_data('straat')
+    elif not validate.huis_nr(house_number):
+        sub_incorrect_data('huisnummer')
+    elif not validate.postcode(postal_code):
+        sub_incorrect_data('postcode')
+    elif not validate.tel_nr(phone_number):
+        sub_incorrect_data('telefoonnummer')
+    else:
+      # With our data being valid we start a pop-up to ask for a security code sent to your phone.
         global security_code
         security_code = registration.send_msg_to_nr(phone_number)
         sub_personal_code()
-    else:
-        sub_incorrect_data()
 
 
 def registration_init():
@@ -86,6 +98,7 @@ def registration_init():
 
     phone_nr_label = Label(registration_window, text='Tel.nummer: ').grid(row=4, sticky=W)
     phone_nr_entry = Entry(registration_window)
+    phone_nr_entry.insert(END, '06-')
     phone_nr_entry.grid(row=4, column=1)
 
     user_dict = {'uid': registration.randomID(),
@@ -95,7 +108,7 @@ def registration_init():
                  'postal_code': postal_code_entry,
                  'phone_number': phone_nr_entry}
     # When the submit button is clicked, entries are checked for validity.
-    submit_button = Button(registration_window, text="submit", command=check_entries(user_dict)).grid(row=5, column=1, sticky=E)
+    submit_button = Button(registration_window, text="submit", command=lambda: check_entries(user_dict)).grid(row=5, column=1, sticky=E)
 
     # Init registration_window
     registration_window.mainloop()

@@ -28,43 +28,21 @@ RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
 
 # ToDo : Finish Comments / Documentation!
-def is_valid(data):
-    """
-
-    :param data:
-    :return:
-    """
-    if not re.match("^[\p{L}\s.']+$", data[Info.NAME.value]):
-        return False, "naam"
-    elif not re.match("^[\p{L}\s.']+$", data[Info.STREET.value]):
-        return False, "straatnaam"
-    elif not re.match("^\d+$", data[Info.HOUSE_NR.value]):
-        return False, "huisnummer"
-    elif not re.match("^\d{4}\w{2}$", data[Info.POSTAL_CODE.value]):
-        return False, "postcode"
-    elif not re.match("^\d{8}$", data[Info.PHONE_NR.value]):
-        return False, "telefoonnummer"
-    else:
-        return True, ""
-
-'''
-This block of code will be the database transition
-    {'uid': randomID(),
-        'name': data[Info.NAME],
-        'street': data[Info.STREET],
-        'house_number': data[Info.HOUSE_NR],
-        'postal_code': data[Info.POSTAL_CODE],
-        'phone_number': data[Info.PHONE_NR]}
-'''
-
-
-# ToDo : Finish Comments / Documentation!
 def add_to_database(data):
     """
 
     :param data:
     :return:
     """
+    '''
+    This block of code will be the database transition
+        {'uid': randomID(),
+            'name': data[Info.NAME],
+            'street': data[Info.STREET],
+            'house_number': data[Info.HOUSE_NR],
+            'postal_code': data[Info.POSTAL_CODE],
+            'phone_number': data[Info.PHONE_NR]}
+    '''
     pass
 
 
@@ -75,11 +53,11 @@ def send_msg_to_nr(tel_nr):
     :param tel_nr:
     :return:
     """
-    code = make_random_code(RANDOM_CONFIRMATION_CODE_LENGTH, CodeType.ALL)
+    confirmation_code = make_random_code(RANDOM_CONFIRMATION_CODE_LENGTH, CodeType.ALL)
     # TELEGRAM SEND MESSAGE WITH 'code' IN IT RIIIIIIIIGHT HEEEEEEEEEEEEEEEERE
-    print(code)
+    print(confirmation_code)
     # INSTEAD, IMMA USE THIS PRINT IN THE MEANWHILE
-    return code
+    return confirmation_code
 
 
 # ToDo : Finish Comments / Documentation!
