@@ -1,7 +1,7 @@
 from tkinter import *
 from enum import Enum
 import registration
-import validate
+import Validate
 
 
 entries = []
@@ -154,3 +154,7 @@ def startScreen():
 
 screen = startScreen()
 screen.mainloop()
+
+
+
+
