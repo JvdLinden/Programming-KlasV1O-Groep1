@@ -1,6 +1,5 @@
 import string
 import random
-import re
 from enum import Enum
 
 
@@ -17,11 +16,6 @@ class Info(Enum):
     POSTAL_CODE = 3
     PHONE_NR = 4
 
-_myDict = {
-    'name': 'naampje',
-    'street' : 'straatje',
-}
-
 # CONSTANTS
 RANDOM_ID_LENGTH = 8
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
@@ -36,12 +30,12 @@ def add_to_database(data):
     """
     '''
     This block of code will be the database transition
-        {'uid': randomID(),
-            'name': data[Info.NAME],
-            'street': data[Info.STREET],
-            'house_number': data[Info.HOUSE_NR],
-            'postal_code': data[Info.POSTAL_CODE],
-            'phone_number': data[Info.PHONE_NR]}
+        {'sticker': randomID(),
+            'name': data['name'],
+            'street': data['street'],
+            'house_number': data['house_number'],
+            'postal_code': data['postal_code'],
+            'phone_number': data['phone_number']}
     '''
     pass
 
@@ -71,11 +65,11 @@ def randomID():
 
 # ToDo : Finish Comments / Documentation!
 def make_random_code(length, type_of_code):
-    """ToDo: ADD DOCUMENTATION HERE
-
-    :param length:
-    :param type_of_code:
-    :return:
+    """
+        Method for making a pseudo-randomized code.
+    :param length: Specify the length of the code you want.
+    :param type_of_code: specify whether or not to use digits, letters or both.
+    :return: returns the code as a string.
     """
     _randomizer = ""
     # Check if the requested type equals DIGITS
