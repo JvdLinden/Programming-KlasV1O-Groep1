@@ -4,9 +4,9 @@ import registration
 import validate
 
 
-entries = []
 labels = ["Naam: ", "Straat: ", "Huisnummer: ", "Postcode: ", "Tel.nummer: "]
-data = []
+# CONSTANTS
+TELEGRAM_BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 
 
 class Info(Enum):
@@ -17,7 +17,7 @@ class Info(Enum):
     PHONE_NR = 4
 
 
-def sub_personal_code():
+def sub_personal_code(confirmation_code):
     # Default subscreen settings
     sub_window = Toplevel(master=registration_window)
     sub_window.lift()
@@ -27,7 +27,7 @@ def sub_personal_code():
     code_label = Label(sub_window, text="Voer de ontvangen code in: ").grid(row=0, sticky=W)
     code_entry = Entry(sub_window,)
     code_entry.grid(row=0, column=1)
-    submit_button = Button(sub_window, text="submit", command=check_code(code_entry.get(), sub_window))
+    submit_button = Button(sub_window, text="submit")
     submit_button.grid(row=1, column=1)
 
 
@@ -42,14 +42,8 @@ def sub_incorrect_data(incorrect_entry):
     ok_button.pack()
 
 
-def check_code(input_code, code_window):  # checks Telegram sent code to see if it matches user input.
-    if input_code == security_code:
-        code_window.destroy
-    else:
-        pass
-
-
 def check_entries(entries):
+    # Method validates entries and throws a pop-up when something isn't noted properly.
     # Data starts out as dict with entries
     name = entries['name'].get()  # All the entries are converted to the input strings
     street = entries['street'].get()
@@ -67,10 +61,8 @@ def check_entries(entries):
     elif not validate.tel_nr(phone_number):
         sub_incorrect_data('telefoonnummer')
     else:
-      # With our data being valid we start a pop-up to ask for a security code sent to your phone.
-        global security_code
-        security_code = registration.send_msg_to_nr(phone_number)
-        sub_personal_code()
+      # With our data being valid we start a pop-up containing a security code to send to Telegram.
+        sub_personal_code(registration.send_msg_to_nr(phone_number))
 
 
 def registration_init():
@@ -112,8 +104,6 @@ def registration_init():
 
     # Init registration_window
     registration_window.mainloop()
-registration_window = -1
-security_code = -1
 
 
 def startScreen():
