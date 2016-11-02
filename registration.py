@@ -17,12 +17,23 @@ class Info(Enum):
     POSTAL_CODE = 3
     PHONE_NR = 4
 
+_myDict = {
+    'name': 'naampje',
+    'street' : 'straatje',
+}
+
 # CONSTANTS
 RANDOM_ID_LENGTH = 8
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
 
+# ToDo : Finish Comments / Documentation!
 def is_valid(data):
+    """
+
+    :param data:
+    :return:
+    """
     if not re.match("^[\p{L}\s.']+$", data[Info.NAME.value]):
         return False, "naam"
     elif not re.match("^[\p{L}\s.']+$", data[Info.STREET.value]):
@@ -35,6 +46,7 @@ def is_valid(data):
         return False, "telefoonnummer"
     else:
         return True, ""
+
 '''
 This block of code will be the database transition
     {'uid': randomID(),
@@ -46,42 +58,64 @@ This block of code will be the database transition
 '''
 
 
+# ToDo : Finish Comments / Documentation!
 def add_to_database(data):
+    """
+
+    :param data:
+    :return:
+    """
     pass
 
 
-def send_msg_to_nr(tel_nr):  # Sends an authentication message to the given number
-    code = make_random_code(6, CodeType.ALL)
+# ToDo : Finish Comments / Documentation!
+def send_msg_to_nr(tel_nr):
+    """Sends an authentication message to the given number
+
+    :param tel_nr:
+    :return:
+    """
+    code = make_random_code(RANDOM_CONFIRMATION_CODE_LENGTH, CodeType.ALL)
     # TELEGRAM SEND MESSAGE WITH 'code' IN IT RIIIIIIIIGHT HEEEEEEEEEEEEEEEERE
     print(code)
     # INSTEAD, IMMA USE THIS PRINT IN THE MEANWHILE
     return code
 
 
+# ToDo : Finish Comments / Documentation!
 def randomID():
     """TODO: ADD DOCUMENTATION HERE
 
     :return:
     """
-    return make_random_code(8, CodeType.DIGITS)
+    return make_random_code(RANDOM_ID_LENGTH, CodeType.DIGITS)
 
 
+# ToDo : Finish Comments / Documentation!
 def make_random_code(length, type_of_code):
-    """TODO: ADD DOCUMENTATION HERE
+    """ToDo: ADD DOCUMENTATION HERE
 
     :param length:
     :param type_of_code:
     :return:
     """
-    randomizer = ""
-    if type_of_code.value == 0:
-        randomizer = string.digits
-    elif type_of_code.value == 1:
-        randomizer = string.ascii_uppercase
-    elif type_of_code.value == 2:
-        randomizer = string.ascii_uppercase + string.digits
-    random_code = ""
-    for i in range(0, length):
-        random_int = random.randint(0, len(randomizer) - 1)
-        random_code += randomizer[random_int]
-    return random_code
+    _randomizer = ""
+    # Check if the requested type equals DIGITS
+    if type_of_code == CodeType.DIGITS:
+        _randomizer = string.digits
+
+    # Check if the requested type equals LETTERS
+    elif type_of_code == CodeType.LETTERS:
+        _randomizer = string.ascii_uppercase
+
+    # Check if the requested type equals ALL
+    elif type_of_code == CodeType.ALL:
+        _randomizer = string.ascii_uppercase + string.digits
+
+    _randomCode = ""
+    # ToDo : add documentation
+    for i in range(length):
+        _randomInteger = random.randint(0, len(_randomizer) - 1)
+        _randomCode += _randomizer[_randomInteger]
+
+    return _randomCode
