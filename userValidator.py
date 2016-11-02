@@ -11,7 +11,10 @@ class UserValidator(object):
     __success = False
 
     def getValue(self):
-        return self.__success
+        if self.__success:
+            return self.__personalCode
+        else:
+            return self.__success
 
     def handleButtonClick(self):
         if self.__hasEnteredValidPersonalCode:
@@ -22,12 +25,12 @@ class UserValidator(object):
     def validateExternalCode(self):
         _input = self._entryPersonalCode.get()
         if _input == self.__randomCode:
-            self._screenRoot.destroy()
             self.__success = True
 
         else:
-            # Reset the Button handling
-            self.__hasEnteredValidPersonalCode = False
+            self.__success = False
+
+        self._screenRoot.destroy()
 
     def validatePersonalCode(self):
         """This function will start the validation process
@@ -99,11 +102,12 @@ class UserValidator(object):
         self._screenRoot.mainloop()
 
 # Todo : onderstaande mag weg, maar dient als voorbeeld
+
 # Create a validator object
-objectje = UserValidator()
+myObject = UserValidator()
 
 # when the validator object is done running, retrieve the value.
-newValue = objectje.getValue()
+newValue = myObject.getValue()
 
 # print Value
 print(newValue)
