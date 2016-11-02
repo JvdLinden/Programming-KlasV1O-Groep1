@@ -90,3 +90,4 @@ class DatabaseHandler(object):
     def getChatIDFromPersonalCode(self, personalCode):
         _sql = "SELECT telegram_chat_id FROM users WHERE personal_code = '{}'".format(personalCode)
         _result = self.runQuery(_sql)
+        return _result[0][0] #The result form the query is a list of tuples - We only need the first item from the first Tuple
