@@ -50,15 +50,15 @@ def check_entries(entries):
     house_number = entries['house_number'].get()
     postal_code = entries['postal_code'].get()
     phone_number = entries['phone_number'].get()
-    if not validate.string(name):
+    if not Validate.string(name):
         sub_incorrect_data('naam')
-    elif not validate.string(street):
+    elif not Validate.string(street):
         sub_incorrect_data('straat')
-    elif not validate.huis_nr(house_number):
+    elif not Validate.huis_nr(house_number):
         sub_incorrect_data('huisnummer')
-    elif not validate.postcode(postal_code):
+    elif not Validate.postcode(postal_code):
         sub_incorrect_data('postcode')
-    elif not validate.tel_nr(phone_number):
+    elif not Validate.tel_nr(phone_number):
         sub_incorrect_data('telefoonnummer')
     else:
       # With our data being valid we start a pop-up containing a security code to send to Telegram.
