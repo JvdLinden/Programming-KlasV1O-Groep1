@@ -1,11 +1,33 @@
 import tkinter
+from tkinter import messagebox
 from Handlers import DatabaseHandler, telegramHandler
 from ProjectData import Constants
 
-class StoreBikePopUp(object):
+class UserValidator(object):
+
+    __hasEnteredValidPersonalCode = False
+    __randomCode = ''
+    __personalCode = ''
+    __success = False
+
+    def getValue(self):
+        return self.__success
 
     def handleButtonClick(self):
-        self.validatePersonalCode()
+        if self.__hasEnteredValidPersonalCode:
+            self.validateExternalCode()
+        else:
+            self.validatePersonalCode()
+
+    def validateExternalCode(self):
+        _input = self._entryPersonalCode.get()
+        if _input == self.__randomCode:
+            self._screenRoot.destroy()
+            self.__success = True
+
+        else:
+            # Reset the Button handling
+            self.__hasEnteredValidPersonalCode = False
 
     def validatePersonalCode(self):
         """This function will start the validation process
@@ -13,21 +35,30 @@ class StoreBikePopUp(object):
         :return: nothing
         """
         # Todo: Database meegeven in de constructor
-        #database object aanmaken
+        # database object aanmaken
         _databaseHandler = DatabaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
 
-        # Ophalen telegram chat id
-        telegramChatCode = _databaseHandler.getChatIDFromPersonalCode(self._entryPersonalCode.get())
+        #ophalen personal Code
+        self.__personalCode = self._entryPersonalCode.get()
 
-        #verwijder database instantie
+        # Ophalen telegram chat id
+        telegramChatCode = _databaseHandler.getChatIDFromPersonalCode(self.__personalCode)
+
+        # verwijder database instantie
         del _databaseHandler
+
+        self.__hasEnteredValidPersonalCode = True
 
         _telegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
 
         #Todo: Importeren Random Code genrator
-        _RANDOM_CODE = 'QWERTY'
+        self.__randomCode = 'QWERTY' # Todo <----- Here!
 
-        _telegramHandler.sendMessageToUser(telegramChatCode, _RANDOM_CODE)
+        _telegramHandler.sendMessageToUser(telegramChatCode, self.__randomCode)
+
+        _newMessage = 'Geef de ontvangen code a.u.b. in'
+        self._labelMessage.configure(text=_newMessage)
+        self._entryPersonalCode.delete(0, tkinter.END)
 
 
     def __init__(self):
@@ -67,6 +98,12 @@ class StoreBikePopUp(object):
 
         self._screenRoot.mainloop()
 
+# Todo : onderstaande mag weg, maar dient als voorbeeld
+# Create a validator object
+objectje = UserValidator()
 
-# Todo : Delete onderstaande
-objectje = StoreBikePopUp()
+# when the validator object is done running, retrieve the value.
+newValue = objectje.getValue()
+
+# print Value
+print(newValue)
