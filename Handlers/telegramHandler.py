@@ -49,7 +49,7 @@ class TelegramHandler(object):
         return _update
 
     def hasNewUpdates(self):
-        _newUpdate = self.bot.getUpdates(self.current_response+1, limit=1, offset=1)
+        _newUpdate = self.bot.getUpdates(self.current_response+1, limit=1, timeout=1)
         if len(_newUpdate) > 0:
             return True
         return False
