@@ -45,7 +45,7 @@ class TelegramHandler(object):
 
         _message = "Beste gebruiker, hierbij de bevestigingscode die u moet ingeven bij het ophalen van uw fiets\n\nUw Code is: {}".format(_code)
 
-        self.sendMessageToUser(user, _message)
+        self.sendMessageToUser(chatID, _message)
         return _code
 
     def getNewUpdates(self):
