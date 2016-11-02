@@ -1,9 +1,9 @@
 from userValidator import UserValidator
 from ProjectData import Constants
-from Handlers import DatabaseHandler
+from Handlers import databaseHandler
 
 #create a DatabaseHandler object
-myDB = DatabaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
+myDB = databaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
 
 # Create a validator object (the UserValidator-object requires a DatabaseHandler)
 myObject = UserValidator(myDB)

@@ -2,7 +2,7 @@
 import time
 from pprint import pprint
 
-from Handlers import telegramHandler, DatabaseHandler
+from Handlers import telegramHandler, databaseHandler
 
 #constants
 BOT_TOKEN = '166998703:AAGvk0No3abHbGc9LpUpJko7WTx1DR9jURY' #Access token to communicate with the API
@@ -19,7 +19,7 @@ currentUpdateId = 0 #starting point, this'll change with the first update receiv
 tHandler = telegramHandler.TelegramHandler(BOT_TOKEN, currentUpdateId)
 
 #create a databasehandler
-myDB = DatabaseHandler.DatabaseHandler(FAKE_DATABASE)
+myDB = databaseHandler.DatabaseHandler(FAKE_DATABASE)
 
 #create a table in the new Database
 myDB.runQuery('''

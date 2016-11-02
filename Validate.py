@@ -1,6 +1,6 @@
 import re
 from enum import Enum
-import string
+import string as stringImport
 import random
 
 def string(gui_input):
@@ -34,21 +34,21 @@ def make_random_code(length, type_of_code):
     _randomizer = ""
     # Check if the requested type equals DIGITS
     if type_of_code == CodeType.DIGITS:
-        _randomizer = string.digits
+        _randomizer = stringImport.digits
 
     # Check if the requested type equals LETTERS
     elif type_of_code == CodeType.LETTERS:
-        _randomizer = string.ascii_uppercase
+        _randomizer = stringImport.ascii_uppercase
 
     # Check if the requested type equals ALL
     elif type_of_code == CodeType.ALL:
-        _randomizer = string.ascii_uppercase + string.digits
+        _randomizer = stringImport.ascii_uppercase + stringImport.digits
 
     _randomCode = ""
     # ToDo : add documentation
+
     for i in range(length):
-        _randomInteger = random.randint(0, len(_randomizer) - 1)
-        _randomCode += _randomizer[_randomInteger]
+        _randomCode += random.choice(_randomizer)
 
     return _randomCode
 

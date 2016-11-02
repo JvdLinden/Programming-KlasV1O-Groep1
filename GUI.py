@@ -1,7 +1,7 @@
 from tkinter import *
 from enum import Enum
 import registration
-import Validate
+from Validate import *
 
 
 labels = ["Naam: ", "Straat: ", "Huisnummer: ", "Postcode: ", "Tel.nummer: "]
