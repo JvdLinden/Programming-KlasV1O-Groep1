@@ -1,5 +1,8 @@
 import sqlite3
 
+TABLE_USERS = 'users'
+TABLE_ENTRIES = 'entries'
+
 class DatabaseHandler(object):
     """This is the DatabaseHandler class.
     This classes'sole purpose is to handle a database connection to a sqlite3 database.
@@ -83,3 +86,7 @@ class DatabaseHandler(object):
         _result = self.runQuery("SELECT * FROM {}".format(table))
 
         return _result
+
+    def getChatIDFromPersonalCode(self, personalCode):
+        _sql = "SELECT telegram_chat_id FROM users WHERE personal_code = '{}'".format(personalCode)
+        _result = self.runQuery(_sql)
