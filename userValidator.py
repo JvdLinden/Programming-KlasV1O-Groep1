@@ -11,18 +11,31 @@ class UserValidator(object):
     __success = False
 
     def getValue(self):
+        """Returns the value of run succes
+
+        :return: if the validation was unssuccesfull it wil  return false, else it will return the personalCode formt he validated user
+        """
         if self.__success:
             return self.__personalCode
         else:
             return self.__success
 
     def handleButtonClick(self):
+        """This function handles the button click in the validation Field
+
+        :return: nothing
+        """
         if self.__hasEnteredValidPersonalCode:
             self.validateExternalCode()
         else:
             self.validatePersonalCode()
 
     def validateExternalCode(self):
+        """validates the externalcode (i.e.: the code that the application sends to the user)
+        After validating is will destroy the mainloop
+
+        :return: nothing
+        """
         _input = self._entryPersonalCode.get()
         if _input == self.__randomCode:
             self.__success = True
@@ -39,7 +52,7 @@ class UserValidator(object):
         """
         # Todo: Database meegeven in de constructor
         # database object aanmaken
-        _databaseHandler = DatabaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
+        _databaseHandler = DatabaseHandler.DatabaseHandler(Constants.DATABASE)
 
         #ophalen personal Code
         self.__personalCode = self._entryPersonalCode.get()
