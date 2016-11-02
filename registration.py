@@ -1,7 +1,7 @@
 from Validate import *
 
-# Todo - Add comments / documentation
-class Info(Enum):
+
+class Info(Enum):  # Class specifying in what order the information during registration is processed
     NAME = 0
     STREET = 1
     HOUSE_NR = 2

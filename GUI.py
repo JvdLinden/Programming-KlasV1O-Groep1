@@ -1,20 +1,13 @@
 from tkinter import *
-from enum import Enum
+from userValidator import UserValidator
 import registration
-from Validate import *
+import Validate
 
-# Todo - Add comments / documentation
+# Array containing labels for registration
 labels = ["Naam: ", "Straat: ", "Huisnummer: ", "Postcode: ", "Tel.nummer: "]
 # CONSTANTS
 TELEGRAM_BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 
-# Todo - Add comments / documentation
-class Info(Enum):
-    NAME = 0
-    STREET = 1
-    HOUSE_NR = 2
-    POSTAL_CODE = 3
-    PHONE_NR = 4
 
 # Todo - Add comments / documentation
 def sub_personal_code(confirmation_code):
@@ -54,17 +47,18 @@ def sub_incorrect_data(incorrect_entry):
 # Todo - Add comments / documentation
 def check_entries(entries):
     """
-
-    :param entries:
-    :return:
+        Method validates entries and throws a pop-up when something isn't noted properly.
+    :param entries: Data starts out as dictionary containing entries
+    :return: no return value.
     """
-    # Method validates entries and throws a pop-up when something isn't noted properly.
-    # Data starts out as dict with entries
-    name = entries['name'].get()  # All the entries are converted to the input strings
+    # All the entries are converted to individual input strings.
+    name = entries['name'].get()  # This his hardcoded because the data type can vary.
     street = entries['street'].get()
     house_number = entries['house_number'].get()
     postal_code = entries['postal_code'].get()
     phone_number = entries['phone_number'].get()
+    # Here we start validating our data. Using this construction means we don't validate the rest of the data if the
+    # first variable is invalid.
     if not Validate.string(name):
         sub_incorrect_data('naam')
     elif not Validate.string(street):
