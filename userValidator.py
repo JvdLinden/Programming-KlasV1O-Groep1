@@ -1,7 +1,7 @@
 import tkinter
 from Handlers import DatabaseHandler, telegramHandler
 from ProjectData import Constants
-from Validate import make_random_code
+
 
 class UserValidator(object):
     """This is de UserValidator-class
@@ -10,16 +10,25 @@ class UserValidator(object):
 
     """
 
+    # This variable tracks whether the user entered a valid personal code
     __hasEnteredValidPersonalCode = False
-    __randomCode = ''
-    __personalCode = ''
-    __attempts = 0
+
+    # The final result of the interaction, will be True after a successful validation
     __success = False
 
-    def getValue(self):
-        """Returns the value of run succes
+    # The validation key
+    __randomCode = ''
 
-        :return: if the validation was unssuccesfull it wil  return false, else it will return the personalCode formt he validated user
+    # The personal user code
+    __personalCode = ''
+
+    # Amount of validation attempts
+    __attempts = 0
+
+    def getValue(self):
+        """Returns the value of run success
+
+        :return: if successful: the user_id, else it will return false
         """
         if self.__success:
             return self.__personalCode
@@ -57,10 +66,19 @@ class UserValidator(object):
         self.stop()
 
     def foreceStop(self):
+        """This will stop the mainloop and thus kill the windows opened by this class.
+        Also it will set the result to 'False', meaning the validation has failed.
+
+        :return: nothing
+        """
         self.__success = False
         self.stop()
 
     def stop(self):
+        """Stops the mainloop and kills all windows
+
+        :return:
+        """
         self._screenRoot.destroy()
 
     def validatePersonalCode(self):
@@ -68,8 +86,6 @@ class UserValidator(object):
 
         :return: nothing
         """
-        # Todo: Database meegeven in de constructor
-        # database object aanmaken
 
         #ophalen personal Code
         self.__personalCode = self._entryPersonalCode.get()
@@ -77,23 +93,17 @@ class UserValidator(object):
         # Ophalen telegram chat id
         telegramChatCode = self.__databaseHandler.getChatIDFromPersonalCode(self.__personalCode)
 
-        print(telegramChatCode)
-
         if telegramChatCode:
             self.__hasEnteredValidPersonalCode = True
 
             _telegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
 
-            #Todo: Importeren Random Code genrator
-            self.__randomCode = 'QWERTY' # Todo <----- Here!
-
-            _telegramHandler.sendMessageToUser(telegramChatCode, self.__randomCode)
+            self.__randomCode = _telegramHandler.sendValidationCodeToUser(telegramChatCode)
 
             _newMessage = 'Geef de ontvangen code a.u.b. in'
             self._labelMessage.configure(text=_newMessage)
 
         self._entryPersonalCode.delete(0, tkinter.END)
-
 
     def __init__(self, database):
         """
