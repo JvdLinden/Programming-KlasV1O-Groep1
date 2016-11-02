@@ -1,13 +1,18 @@
 import tkinter
-from tkinter import messagebox
 from Handlers import DatabaseHandler, telegramHandler
 from ProjectData import Constants
 
 class UserValidator(object):
+    """This is de UserValidator-class
+    It can autonomously handle a validation.
+    The UserValidator class requires an active DatabaseHandler
+
+    """
 
     __hasEnteredValidPersonalCode = False
     __randomCode = ''
     __personalCode = ''
+    __attempts = 0
     __success = False
 
     def getValue(self):
@@ -25,8 +30,13 @@ class UserValidator(object):
 
         :return: nothing
         """
-        if self.__hasEnteredValidPersonalCode:
+        self.__attempts += 1
+        if self.__attempts >= Constants.MAX_LOGIN_ATTEMPTS:
+            self.foreceStop()
+
+        elif self.__hasEnteredValidPersonalCode:
             self.validateExternalCode()
+
         else:
             self.validatePersonalCode()
 
@@ -43,6 +53,13 @@ class UserValidator(object):
         else:
             self.__success = False
 
+        self.stop()
+
+    def foreceStop(self):
+        self.__success = False
+        self.stop()
+
+    def stop(self):
         self._screenRoot.destroy()
 
     def validatePersonalCode(self):
@@ -52,16 +69,14 @@ class UserValidator(object):
         """
         # Todo: Database meegeven in de constructor
         # database object aanmaken
-        _databaseHandler = DatabaseHandler.DatabaseHandler(Constants.DATABASE)
 
         #ophalen personal Code
         self.__personalCode = self._entryPersonalCode.get()
 
         # Ophalen telegram chat id
-        telegramChatCode = _databaseHandler.getChatIDFromPersonalCode(self.__personalCode)
+        telegramChatCode = self.__databaseHandler.getChatIDFromPersonalCode(self.__personalCode)
 
-        # verwijder database instantie
-        del _databaseHandler
+        print(telegramChatCode)
 
         if telegramChatCode:
             self.__hasEnteredValidPersonalCode = True
@@ -79,10 +94,12 @@ class UserValidator(object):
         self._entryPersonalCode.delete(0, tkinter.END)
 
 
-    def __init__(self):
+    def __init__(self, database):
         """
             Constructor
         """
+
+        self.__databaseHandler = database
 
         self._screenRoot = tkinter.Tk()
         self._screenRoot.title('Fiets stallen')
@@ -116,13 +133,3 @@ class UserValidator(object):
 
         self._screenRoot.mainloop()
 
-# Todo : onderstaande mag weg, maar dient als voorbeeld
-
-# Create a validator object
-myObject = UserValidator()
-
-# when the validator object is done running, retrieve the value.
-newValue = myObject.getValue()
-
-# print Value
-print(newValue)
