@@ -119,7 +119,6 @@ def startScreen():
                                   'Kies één van de volgende opties.').grid(row=0, column=0)
 
     # Adding 'Registreren'-button
-    # ToDo : Add command to button
     buttonRegister = Button(master =root, text='Registeren', command=registration_init).grid(row=1, column=0)
 
     # Adding 'Stallen'-button
