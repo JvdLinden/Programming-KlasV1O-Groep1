@@ -1,7 +1,9 @@
 from tkinter import *
 from userValidator import UserValidator
+from Algemene_info import *
 import registration
 import Validate
+
 
 # Array containing labels for registration
 labels = ["Naam: ", "Straat: ", "Huisnummer: ", "Postcode: ", "Tel.nummer: "]
@@ -43,6 +45,7 @@ def sub_incorrect_data(incorrect_entry):
     ok_button = Button(sub_window, text="OK", command=sub_window.destroy)
     incorrect_label.pack()
     ok_button.pack()
+
 
 # Todo - Add comments / documentation
 def check_entries(entries):
@@ -147,7 +150,7 @@ def startScreen():
 
     # Adding 'Algemene Informatie'-button
     # ToDo : Add command to button
-    buttonInfo = Button(master=root, text='Algemene Informatie').grid(row=4, column=0)
+    buttonInfo = Button(master=root, text='Algemene Informatie', command=algemene_info).grid(row=4, column=0)
 
     # Adding 'Persoonlijke Informatie'-button
     # ToDo : Add command to button

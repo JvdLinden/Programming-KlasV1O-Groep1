@@ -1,11 +1,15 @@
 from tkinter import *
 
+algemene_info_window = -1
+
+
 def algemene_info():
     """
     Create a GUI for algemene informatie
 
     :return: Returns a GUI Screen
     """
+    global algemene_info_window
     # Create a screen to ad information
     algemene_info_window = Tk()
 
@@ -34,11 +38,10 @@ def algemene_info():
                                                                    'altijd veilig stallen!').grid(row=3)
 
     # Button back to start screen
-    # ToDo : Add Command to button
-    backToStart_button = Button(master=algemene_info_window, text='Terug naar start').grid(row=4)
-
+    backToStart_button = Button(master=algemene_info_window, text='Terug naar start', command=close_window).grid(row=4)
 
     algemene_info_window.mainloop()
 
 
-algemene_info()
+def close_window():
+    algemene_info_window.destroy()
