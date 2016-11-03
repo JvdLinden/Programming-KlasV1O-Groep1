@@ -34,7 +34,7 @@ class GUI(object):
             master=self.root,
             text='Registeren',
             command=lambda: registration.RegistrationForm(database),
-            width=15,
+            width=17,
             pady=8
         )
         self.buttonRegister.grid(row=1)
@@ -44,7 +44,7 @@ class GUI(object):
         self.buttonStore = tkinter.Button(
             master=self.root,
             text='Stallen',
-            width=15,
+            width=17,
             pady=8
         )
         self.buttonStore.grid(row=2)
@@ -54,7 +54,7 @@ class GUI(object):
         self.buttonRetrieve = tkinter.Button(
             master=self.root,
             text='Ophalen',
-            width=15,
+            width=17,
             pady=8
         )
         self.buttonRetrieve.grid(row=3)
@@ -64,7 +64,7 @@ class GUI(object):
             master=self.root,
             text='Algemene Informatie',
             command=AlgemeneInfo.algemeneInfo,
-            width=15,
+            width=17,
             pady=8
         )
         self.buttonInfo.grid(row=4)
@@ -74,7 +74,7 @@ class GUI(object):
         self.buttonPersonalInfo = tkinter.Button(
             master=self.root,
             text='Persoonlijke Informatie',
-            width=15,
+            width=17,
             pady=8
         )
         self.buttonPersonalInfo.grid(row=5)
