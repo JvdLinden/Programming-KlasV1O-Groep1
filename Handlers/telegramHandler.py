@@ -1,5 +1,6 @@
 import telepot
-import string, random
+import string
+import random
 from ProjectData import Constants
 
 
@@ -77,43 +78,7 @@ class TelegramHandler(object):
             return True
         return False
 
-    def handleUpdates(self, updates):
-        """Handles all updates, and returns a list of dicts with update data
-
-        """
-        _list = []
-        for update in updates:
-            _list += [self.handleUpdate(update)]
-        return _list
-
-    def handleUpdate(self, update):
-        """Handles a single update
-
-        This is currently a test function, as we still have to vdevelop a format for passing and receiving codes.
-        """
-        if not update:
-            return {}
-
-        update_id = update['update_id']
-
-        if self.current_response < update_id:
-            self.current_response = update_id
-
-        code = None
-        message = update['message']
-        text = message['text']
-
-        if text.startswith(Constants.CODE_HEADER_REGISTER):
-            code = text.strip(Constants.CODE_HEADER_REGISTER).split()[0]
-
-        chat_id = message['chat']['id']
-
-        return {
-            'code': code,
-            'id': chat_id,
-            'uid': update_id,
-            'text': text
-        }
+    #
 
     def registerUpdateID(self, id):
         if id > self.current_response:
@@ -139,7 +104,7 @@ class TelegramHandler(object):
         :param database: de database waarin de updates moeten worden opgeslagen
         :return: nothing
         """
-        #zorgen dat de code stop wanneer er niets te verwerken valt
+        # zorgen dat de code stop wanneer er niets te verwerken valt
         if self.hasNewUpdates():
             updates = self.getNewUpdates()
 
@@ -166,3 +131,42 @@ class TelegramHandler(object):
 
             database.insertNewItem(_dict, Constants.TABLE_UPDATES)
             database.saveDatabase()
+
+# --- OLD CODE ---
+    # def handleUpdates(self, updates):
+    #     """Handles all updates, and returns a list of dicts with update data
+    #
+    #     """
+    #     _list = []
+    #     for update in updates:
+    #         _list += [self.handleUpdate(update)]
+    #     return _list
+    #
+    # def handleUpdate(self, update):
+    #     """Handles a single update
+    #
+    #     This is currently a test function, as we still have to vdevelop a format for passing and receiving codes.
+    #     """
+    #     if not update:
+    #         return {}
+    #
+    #     update_id = update['update_id']
+    #
+    #     if self.current_response < update_id:
+    #         self.current_response = update_id
+    #
+    #     code = None
+    #     message = update['message']
+    #     text = message['text']
+    #
+    #     if text.startswith(Constants.CODE_HEADER_REGISTER):
+    #         code = text.strip(Constants.CODE_HEADER_REGISTER).split()[0]
+    #
+    #     chat_id = message['chat']['id']
+    #
+    #     return {
+    #         'code': code,
+    #         'id': chat_id,
+    #         'uid': update_id,
+    #         'text': text
+    #     }
