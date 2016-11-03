@@ -36,8 +36,7 @@ def algemeneInfo():
                                 'altijd veilig stallen!').grid(row=3)
 
     # Button back to start screen
-    backToStartButton = Button(master=algemeneInfoWindow, text='Terug naar start',
-        command=close_window(algemeneInfoWindow)).grid(row=4)
+    backToStartButton = Button(master=algemeneInfoWindow, text='Terug naar start', command=lambda: close_window(algemeneInfoWindow)).grid(row=4)
 
     algemeneInfoWindow.mainloop()
 
