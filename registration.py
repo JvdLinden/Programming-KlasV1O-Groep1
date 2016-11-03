@@ -92,13 +92,13 @@ class RegistrationForm(object):
         #  TELEGRAM CODE HERE
         return confirmationCode
 
-
     def createBikeCode(self):
         """
 
         :return:
         """
-        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE)
+        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.ALL)
+
     def randomID(self):
         """Creates an identification code to be printed on the sticker stuck to the bike.
 
@@ -122,12 +122,14 @@ class RegistrationForm(object):
                                                           "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
         codeLabel.grid(row=0, sticky=tkinter.W)
 
+        # Todo - Waarom zit er een entry in??
         codeEntry = tkinter.Entry(sub_window,)
         codeEntry.grid(row=1)
 
         submitButton = tkinter.Button(sub_window, text="submit",
-                                      command=lambda: self.checkPersonalCode(codeEntry.get()))
+                                      command=sub_window.destroy)
         submitButton.grid(row=2)
+        sub_window.mainloop()
 
     # TODO: Write this method!
     def checkPersonalCode(self, input_code):
@@ -195,6 +197,7 @@ class RegistrationForm(object):
             }
             #Register user into database, expecting reg key soon
             self.myCombinedHandler.registerNewUser(userDict)
+
             # Loop to keep checking if reg key has been entered, when successful res gives chat ID
             chatID = self.myCombinedHandler.checkIfRegistrationKeyExistsInUpdates(registrationCode)
             while not chatID:
