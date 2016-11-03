@@ -122,23 +122,10 @@ class RegistrationForm(object):
                                                           "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
         codeLabel.grid(row=0, sticky=tkinter.W)
 
-        # Todo - Waarom zit er een entry in??
-        codeEntry = tkinter.Entry(sub_window,)
-        codeEntry.grid(row=1)
-
-        submitButton = tkinter.Button(sub_window, text="submit",
+        submitButton = tkinter.Button(sub_window, text="Code Verzonden? klik hier",
                                       command=sub_window.destroy)
         submitButton.grid(row=2)
         sub_window.mainloop()
-
-    # TODO: Write this method!
-    def checkPersonalCode(self, input_code):
-        """
-        method to validate user's input during Telegram verification.
-        :param input_code: The input code as typed by the user.
-        :return: none
-        """
-        pass
 
     def subIncorrectData(self, incorrect_entry):
         """
