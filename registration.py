@@ -49,7 +49,7 @@ def sub_incorrect_data(incorrect_entry, master):
 
 
 # Todo - Add comments / documentation
-def check_entries(entries, master):
+def check_entries(entries, master, database):
     """
         Method validates entries and throws a pop-up when something isn't noted properly.
     :param entries: Data starts out as dictionary containing entries
@@ -74,9 +74,10 @@ def check_entries(entries, master):
     elif not Validate.telNr(phone_number):
         sub_incorrect_data('telefoonnummer', master)
     else:
-      # With our data being valid we start a pop-up containing a security code to send to Telegram.
+        # With our data being valid we start a pop-up containing a security code to send to Telegram.
         sub_personal_code(create_confirmation_code(), master)
-        add_to_database()
+
+        # add to database
 
 
 def add_to_database(database, data):
@@ -88,17 +89,16 @@ def add_to_database(database, data):
     """
     '''
     This block of code will be the database transition
-        {'sticker': randomID(),
+        {   'sticker': randomID(),
             'name': data['name'],
             'street': data['street'],
             'house_number': data['house_number'],
             'postal_code': data['postal_code'],
             'phone_number': data['phone_number']}
     '''
-    return False
 
 
-def registration_init():
+def registration_init(database):
     """
     The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
     :return: none
@@ -136,7 +136,7 @@ def registration_init():
                  'postal_code': postal_code_entry,
                  'phone_number': phone_nr_entry}
     # When the submit button is clicked, entries are checked for validity.
-    submit_button = Button(registration_window, text="submit", command=lambda: check_entries(user_dict, registration_window)).grid(row=5, column=1, sticky=E)
+    submit_button = Button(registration_window, text="submit", command=lambda: check_entries(user_dict, registration_window, database)).grid(row=5, column=1, sticky=E)
 
     # Init registration_window
     registration_window.mainloop()

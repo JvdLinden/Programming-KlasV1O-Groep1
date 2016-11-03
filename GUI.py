@@ -1,7 +1,9 @@
 from Algemene_info import *
+from Handlers import databaseHandler, telegramHandler
+from ProjectData import Constants
 import registration
 
-def startScreen():
+def startScreen(database):
     """Create the GUI for the main screen.
 
     :return: returns a GUI screen
@@ -17,7 +19,7 @@ def startScreen():
                                   'Kies één van de volgende opties.').grid(row=0, column=0)
 
     # Adding 'Registreren'-button
-    buttonRegister = Button(master =root, text='Registeren', command=registration.registration_init)
+    buttonRegister = Button(master =root, text='Registeren', command=lambda: registration.registration_init(database))
     buttonRegister.grid(row=1, column=0)
 
     # Adding 'Stallen'-button
@@ -37,7 +39,9 @@ def startScreen():
 
     return root
 
-screen = startScreen()
+myDatabaseHandler = databaseHandler.DatabaseHandler(Constants.DATABASE)
+
+screen = startScreen(myDatabaseHandler)
 screen.mainloop()
 
 
