@@ -1,6 +1,6 @@
 import Validate
 from ProjectData import Constants
-from tkinter import *
+import tkinter
 from enum import Enum
 
 
@@ -12,148 +12,153 @@ class Info(Enum):  # Class specifying in what order the information during regis
     PHONE_NR = 4
 
 
-def subPersonalCode(confirmationCode, master):
-    """
-    A pop-up containing a personal code for the user which they have to text to Telegram.
-    :param confirmationCode: The code in question
-    :return:
-    """
-    # Default subscreen settings
-    sub_window = Toplevel(master=master)
-    sub_window.lift()
-    sub_window.title("Popup")
+class RegistrationForm(object):
 
-    # Widget creation
-    codeLabel = Label(sub_window, text="Voer de ontvangen code in: ").grid(row=0, sticky=W)
-    codeEntry = Entry(sub_window,)
-    codeEntry.grid(row=0, column=1)
-    submitButton = Button(sub_window, text="submit")
-    submitButton.grid(row=1, column=1)
+    def __init__(self, database):
+        """
+        The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
+        :return: none
+        """
+        # Default settings:
+        self.registrationWindow = tkinter.Tk()
+        self.registrationWindow.title("NS Fietsenstalling")
 
+        # widget creation
+        self.nameLabel = tkinter.Label(self.registrationWindow, text='Naam: ')
+        self.nameLabel.grid(row=0, sticky=tkinter.W)
 
-def subIncorrectData(incorrect_entry, master):
-    """
-    A pop-up to indicate to the user the registration process can't continue because of incorrect data.
-    :param incorrect_entry: The Dutch name of the entry in question containing incorrect data
-    :return: none
-    """
-    subWindow = Toplevel(master=master)
-    subWindow.title("Incorrecte invoer")
-    subWindow.lift()
+        self.nameEntry = tkinter.Entry(self.registrationWindow)
+        self.nameEntry.grid(row=0, column=1)
 
-    incorrectLabel = Label(subWindow, text="De invoer is incorrect. Voer uw %s in." % incorrect_entry)
-    ok_button = Button(subWindow, text="OK", command=subWindow.destroy)
-    incorrectLabel.pack()
-    ok_button.pack()
+        self.streetLabel = tkinter.Label(self.registrationWindow, text='Straat: ')
+        self.streetLabel.grid(row=1, sticky=tkinter.W)
 
+        self.streetEntry = tkinter.Entry(self.registrationWindow)
+        self.streetEntry.grid(row=1, column=1)
 
-# Todo - Add comments / documentation
-def checkEntries(entries, master, database):
-    """
-        Method validates entries and throws a pop-up when something isn't noted properly.
-    :param entries: Data starts out as dictionary containing entries
-    :return: no return value.
-    """
-    # All the entries are converted to individual input strings.
-    name = entries['name'].get()  # This his hardcoded because the data type can vary.
-    street = entries['street'].get()
-    houseNumber = entries['house_number'].get()
-    postalCode = entries['postal_code'].get()
-    phoneNumber = entries['phone_number'].get()
-    # Here we start validating our data. Using this construction means we don't validate the rest of the data if,
-    # for example, the first variable is invalid. Instead it immediately jumps to a pop-up stating which entry is wrong.
-    if not Validate.string(name):
-        subIncorrectData('naam', master)
-    elif not Validate.string(street):
-        subIncorrectData('straat', master)
-    elif not Validate.huisNr(houseNumber):
-        subIncorrectData('huisnummer', master)
-    elif not Validate.postcode(postalCode):
-        subIncorrectData('postcode', master)
-    elif not Validate.telNr(phoneNumber):
-        subIncorrectData('telefoonnummer', master)
-    else:
-        # With our data being valid we start a pop-up containing a security code to send to Telegram.
-        subPersonalCode(createConfirmationCode(), master)
+        self.houseNrLabel = tkinter.Label(self.registrationWindow, text='Huisnummer: ')
+        self.houseNrLabel.grid(row=2, sticky=tkinter.W)
 
-        # add to database
+        self.houseNrEntry = tkinter.Entry(self.registrationWindow)
+        self.houseNrEntry.grid(row=2, column=1)
 
+        self.postalCodeLabel = tkinter.Label(self.registrationWindow, text='Postcode: ')
+        self.postalCodeLabel.grid(row=3, sticky=tkinter.W)
 
-def addToDatabase(database, data):
-    """
+        self.postalCodeEntry = tkinter.Entry(self.registrationWindow)
+        self.postalCodeEntry.grid(row=3, column=1)
 
-    :param database: instance of a database handler
-    :param data: dictionary containing relevant data for registration
-    :return: whether the method succeeded or not
-    """
-    '''
-    This block of code will be the database transition
-        {   'sticker': randomID(),
-            'name': data['name'],
-            'street': data['street'],
-            'house_number': data['house_number'],
-            'postal_code': data['postal_code'],
-            'phone_number': data['phone_number']}
-    '''
+        self.phoneNrLabel = tkinter.Label(self.registrationWindow, text='Tel.nummer: ')
+        self.phoneNrLabel.grid(row=4, sticky=tkinter.W)
+
+        self.phoneNrEntry = tkinter.Entry(self.registrationWindow)
+
+        self.phoneNrEntry.insert(tkinter.END, '06-')
+        self.phoneNrEntry.grid(row=4, column=1)
+
+        user_dict = {'uid': self.randomID(),
+                     'name': self.nameEntry,
+                     'street': self.streetEntry,
+                     'house_number': self.houseNrEntry,
+                     'postal_code': self.postalCodeEntry,
+                     'phone_number': self.phoneNrEntry}
+
+        # When the submit button is clicked, entries are checked for validity.
+        self.submitButton = tkinter.Button(
+            self.registrationWindow,
+            text="submit",
+            command=lambda: self.checkEntries(user_dict)
+        )
+        self.submitButton.grid(row=5, column=1, sticky=tkinter.E)
+
+    def start(self):
+        # Init registration_window
+        self.registrationWindow.mainloop()
+
+    def stop(self):
+        self.registrationWindow.destroy()
+
+    def createConfirmationCode(self):
+        """Creates a confirmation code to be used in Telegram verification.
+
+        :return: the confirmation code.
+        """
+        return Validate.makeRandomCode(Constants.RANDOM_CONFIRMATION_CODE_LENGTH, Validate.CodeType.ALL)
 
 
-def registrationInit(database):
-    """
-    The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
-    :return: none
-    """
-    # Default settings:
-    registrationWindow = Tk()
-    registrationWindow.title("NS Fietsenstalling")
+    def randomID(self):
+        """Creates an identification code to be printed on the sticker stuck to the bike.
 
-    # widget creation
-    nameLabel = Label(registrationWindow, text='Naam: ').grid(row=0, sticky=W)
-    nameEntry = Entry(registrationWindow)
-    nameEntry.grid(row=0, column=1)
+        :return: the identification code.
+        """
+        return Validate.makeRandomCode(Constants.LENGTH_VALIDATION_CODE, Validate.CodeType.DIGITS)
 
-    streetLabel = Label(registrationWindow, text='Straat: ').grid(row=1, sticky=W)
-    streetEntry = Entry(registrationWindow)
-    streetEntry.grid(row=1, column=1)
+    def subPersonalCode(self, confirmationCode):
+        """
+        A pop-up containing a personal code for the user which they have to text to Telegram.
+        :param confirmationCode: The code in question
+        :return:
+        """
+        # Default subscreen settings
+        sub_window = tkinter.Toplevel(master=self.registrationWindow)
+        sub_window.lift()
+        sub_window.title("Popup")
 
-    houseNrLabel = Label(registrationWindow, text='Huisnummer: ').grid(row=2, sticky=W)
-    houseNrEntry = Entry(registrationWindow)
-    houseNrEntry.grid(row=2, column=1)
+        # Widget creation
+        codeLabel = tkinter.Label(master=sub_window, text="Voer de ontvangen code in: ")
+        codeLabel.grid(row=0, sticky=tkinter.W)
 
-    postalCodeLabel = Label(registrationWindow, text='Postcode: ').grid(row=3, sticky=W)
-    postalCodeEntry = Entry(registrationWindow)
-    postalCodeEntry.grid(row=3, column=1)
+        codeEntry = tkinter.Entry(sub_window,)
+        codeEntry.grid(row=0, column=1)
 
-    phoneNrLabel = Label(registrationWindow, text='Tel.nummer: ').grid(row=4, sticky=W)
-    phoneNrEntry = Entry(registrationWindow)
-    phoneNrEntry.insert(END, '06-')
-    phoneNrEntry.grid(row=4, column=1)
+        submitButton = tkinter.Button(sub_window, text="submit")
+        submitButton.grid(row=1, column=1)
 
-    user_dict = {'uid': randomID(),
-                 'name': nameEntry,
-                 'street': streetEntry,
-                 'house_number': houseNrEntry,
-                 'postal_code': postalCodeEntry,
-                 'phone_number': phoneNrEntry}
-    # When the submit button is clicked, entries are checked for validity.
-    submitButton = Button(registrationWindow, text="submit",
-                           command=lambda: checkEntries(user_dict, registrationWindow, database))
-    submitButton.grid(row=5, column=1, sticky=E)
+    def subIncorrectData(self, incorrect_entry):
+        """
+        A pop-up to indicate to the user the registration process can't continue because of incorrect data.
+        :param incorrect_entry: The Dutch name of the entry in question containing incorrect data
+        :return: none
+        """
+        subWindow = tkinter.Toplevel(master=self.registrationWindow)
+        subWindow.title("Incorrecte invoer")
+        subWindow.lift()
 
-    # Init registration_window
-    registrationWindow.mainloop()
-
-    
-def createConfirmationCode():
-    """Creates a confirmation code to be used in Telegram verification.
-    :return: the confirmation code.
-    """
-    return Validate.makeRandomCode(Constants.RANDOM_CONFIRMATION_CODE_LENGTH, Validate.CodeType.ALL)
+        incorrectLabel = tkinter.Label(subWindow, text="De invoer is incorrect. Voer uw %s in." % incorrect_entry)
+        ok_button = tkinter.Button(subWindow, text="OK", command=subWindow.destroy)
+        incorrectLabel.pack()
+        ok_button.pack()
 
 
-# ToDo : Finish Comments / Documentation!
-def randomID():
-    """Creates an identification code to be printed on the sticker stuck to the bike.
-    :return: the identification code.
-    """
-    return Validate.makeRandomCode(Constants.LENGTH_VALIDATION_CODE, Validate.CodeType.DIGITS)
+    def checkEntries(self, entries):
+        """
+            Method validates entries and throws a pop-up when something isn't noted properly.
+        :param entries: Data starts out as dictionary containing entries
+        :return: no return value.
+        """
+        # All the entries are converted to individual input strings.
+        name = entries['name'].get()  # This his hardcoded because the data type can vary.
+        street = entries['street'].get()
+        houseNumber = entries['house_number'].get()
+        postalCode = entries['postal_code'].get()
+        phoneNumber = entries['phone_number'].get()
+        # Here we start validating our data. Using this construction means we don't validate the rest of the data if,
+        # for example, the first variable is invalid. Instead it immediately jumps to a pop-up stating which entry is wrong.
+        if not Validate.string(name):
+            self.subIncorrectData('naam')
+        elif not Validate.string(street):
+            self.subIncorrectData('straat')
+        elif not Validate.huisNr(houseNumber):
+            self.subIncorrectData('huisnummer')
+        elif not Validate.postcode(postalCode):
+            self.subIncorrectData('postcode')
+        elif not Validate.telNr(phoneNumber):
+            self.subIncorrectData('telefoonnummer')
+        else:
+            # With our data being valid we start a pop-up containing a security code to send to Telegram.
+            self.subPersonalCode(self.createConfirmationCode())
+
+            # add to database
+
+
 
