@@ -1,5 +1,6 @@
 from ProjectData import Constants
 from Handlers import telegramHandler, databaseHandler
+from pprint import pprint
 
 class CombinedHandler(object):
     """
@@ -24,7 +25,10 @@ class CombinedHandler(object):
 
     def storeUpdate(self, update):
 
-        if not self.database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_USERS, update['update_id'])):
+        _sql = "SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_UPDATES, update['update_id'])
+        _result = self.database.runQuery(_sql)
+
+        if not _result:
             message = update['message']
             chat = message['chat']
             from_user = message['from']
@@ -40,8 +44,42 @@ class CombinedHandler(object):
 
             self.telegram.registerUpdateID(update['update_id'])
 
-            self.database.insertNewItem(_dict, Constants.TABLE_UPDATES)
+            _result = self.database.insertNewItem(_dict, Constants.TABLE_UPDATES)
             self.database.saveDatabase()
+
+    def registerChatIdToUserViaRegKey(self, regKey, chatID):
+        """DO NOT USE THIS METHOD WITH UNVERIFIED DATA!
+        This method binds a chat id to a user via the user's *regKey*
+
+        :param regKey: the registration key of the user
+        :param chatID: the chatID of the user
+        :return: nothing
+        """
+        _sql = "UPDATE {} SET chat_id = {}, reg_key = '' WHERE reg_key = '{}'".format(Constants.TABLE_USERS, chatID, regKey)
+        _result = self.database.runQuery(_sql)
+        self.database.saveDatabase()
+        return _result
+
+    def getChatIdViaRegistrationKeyInLoggedUpdates(self, registrationKey):
+        """Function to check if a certain registrationKey has been used yet.
+
+        :param registrationKey:
+        :return: the chat_id linked to this registrationKey, False if no key was found
+        """
+        _result = self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, registrationKey))
+
+        if _result:
+            # sqlite database returns a tuple with rows containing row data (tuples in tuples).
+            #  we only expect 1 answer so we need the item on position 0 of the first tuple and position 0 of the tuple on position 0 of the first tuple.
+            self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(Constants.TABLE_UPDATES, registrationKey))
+            return _result[0][0]
+        else:
+            return False
+
+    def checkIfRegistrationKeyHasBeenUsed(self, key):
+        if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, key)):
+            return True
+        return False
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*

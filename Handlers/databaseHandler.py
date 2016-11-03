@@ -59,11 +59,12 @@ class DatabaseHandler(object):
         try:
             # Execute SQL
             self.cursor.execute(sql)
-        except:
+        except Exception as e:
             # We only want to use the actual error message here when debugging
             # for the final application we do not wish to store any Exception messages.
             return False
-        return self.cursor.fetchall()
+        _result = self.cursor.fetchall()
+        return _result
 
     def insertNewItem(self, dataDict, table):
         """This function can insert a new row into a given *table*.
