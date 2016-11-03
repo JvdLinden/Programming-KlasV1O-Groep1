@@ -30,7 +30,7 @@ class GUI(object):
             width=50,
             bg='yellow'
         )
-        self.message.grid(row=0, column=0)
+        self.message.grid(row=0)
 
         # Adding 'Registreren'-button
         self.buttonRegister = tkinter.Button(
@@ -40,7 +40,7 @@ class GUI(object):
             width=15,
             pady=8
         )
-        self.buttonRegister.grid(row=1, column=0)
+        self.buttonRegister.grid(row=1)
 
         # Adding 'Stallen'-button
         # ToDo : Add command to button
@@ -50,7 +50,7 @@ class GUI(object):
             width=15,
             pady=8
         )
-        self.buttonStore.grid(row=2, column=0)
+        self.buttonStore.grid(row=2)
 
         # Adding 'Ophalen'-button
         # ToDo : Add command to button
@@ -60,7 +60,7 @@ class GUI(object):
             width=15,
             pady=8
         )
-        self.buttonRetrieve.grid(row=3, column=0)
+        self.buttonRetrieve.grid(row=3)
 
         # Adding 'Algemene Informatie'-button
         self.buttonInfo = tkinter.Button(
@@ -70,7 +70,7 @@ class GUI(object):
             width=15,
             pady=8
         )
-        self.buttonInfo.grid(row=4, column=0)
+        self.buttonInfo.grid(row=4)
 
         # Adding 'Persoonlijke Informatie'-button
         # ToDo : Add command to button
@@ -80,7 +80,7 @@ class GUI(object):
             width=15,
             pady=8
         )
-        self.buttonPersonalInfo.grid(row=5, column=0)
+        self.buttonPersonalInfo.grid(row=5)
 
     def start(self):
         self.root.mainloop()
