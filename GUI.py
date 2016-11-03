@@ -1,4 +1,4 @@
-from Algemene_info import *
+from AlgemeneInfo import *
 import registration
 
 def startScreen():
@@ -29,7 +29,7 @@ def startScreen():
     buttonRetrieve = Button(master=root, text='Ophalen').grid(row=3, column=0)
 
     # Adding 'Algemene Informatie'-button
-    buttonInfo = Button(master=root, text='Algemene Informatie', command=algemene_info).grid(row=4, column=0)
+    buttonInfo = Button(master=root, text='Algemene Informatie', command=algemeneInfo).grid(row=4, column=0)
 
     # Adding 'Persoonlijke Informatie'-button
     # ToDo : Add command to button
