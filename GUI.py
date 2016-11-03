@@ -55,7 +55,7 @@ class GUI(object):
         self.buttonInfo = tkinter.Button(
             master=self.root,
             text='Algemene Informatie',
-            command=AlgemeneInfo.algemene_info
+            command=AlgemeneInfo.algemeneInfo
         )
         self.buttonInfo.grid(row=4, column=0)
 
@@ -75,7 +75,7 @@ class GUI(object):
 
 
 myDatabaseHandler = databaseHandler.DatabaseHandler(Constants.DATABASE)
-myTelegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN)
+myTelegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
 
 screen = GUI(database=databaseHandler, telegram=myTelegramHandler)
 screen.start()
