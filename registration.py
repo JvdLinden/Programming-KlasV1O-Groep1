@@ -13,12 +13,12 @@ RANDOM_ID_LENGTH = 8
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
 
-# ToDo : Finish Comments / Documentation!
-def add_to_database(data):
+def add_to_database(database, data):
     """
 
-    :param data:
-    :return:
+    :param database: instance of a database handler
+    :param data: dictionary containing relevant data for registration
+    :return: whether the method succeeded or not
     """
     '''
     This block of code will be the database transition
@@ -29,7 +29,7 @@ def add_to_database(data):
             'postal_code': data['postal_code'],
             'phone_number': data['phone_number']}
     '''
-    pass
+    return False
 
 
 # ToDo : Finish Comments / Documentation!
