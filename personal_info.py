@@ -1,20 +1,18 @@
 from userValidator import UserValidator
 from ProjectData import Constants
-from Handlers import databaseHandler
+from Handlers import databaseHandler, combinedHandler
 from tkinter import *
 
 
 
-def Personal_info_validation():
+def Personal_info_validation(cb):
     """
     Show screen for input personal code and the security code
     :return:
     """
-    # Create Database handler object
-    DB_handler = databaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
 
     # Create validator object
-    validator = UserValidator(DB_handler)
+    validator = UserValidator(cb)
 
     # when the validator object is done running, retrieve the value.
     validation = validator.getValue()
@@ -28,7 +26,7 @@ def Personal_info_validation():
         pass
 
 
-def personal_info_screen():
+def personal_info_screen(cb):
 
     """
     Create GUI for personal information after validation
@@ -45,6 +43,8 @@ def personal_info_screen():
     name_label = Label(master=personal_info_window, text='Persoonlijke informatie').grid(row=0)
 
     # ToDo : Add personal info from Database
+    cb.retrievePersonalData()
 
 
-Personal_info_validation()
+
+personal_info_screen()
