@@ -14,8 +14,8 @@ TELEGRAM_BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 # Todo - Add comments / documentation
 def sub_personal_code(confirmation_code):
     """
-
-    :param confirmation_code:
+    A pop-up containing a personal code for the user which they have to text to Telegram.
+    :param confirmation_code: The code in question
     :return:
     """
     # Default subscreen settings
@@ -30,12 +30,13 @@ def sub_personal_code(confirmation_code):
     submit_button = Button(sub_window, text="submit")
     submit_button.grid(row=1, column=1)
 
+
 # Todo - Add comments / documentation
 def sub_incorrect_data(incorrect_entry):
     """
-
-    :param incorrect_entry:
-    :return:
+    A pop-up to indicate to the user the registration process can't continue because of incorrect data.
+    :param incorrect_entry: The Dutch name of the entry in question containing incorrect data
+    :return: none
     """
     sub_window = Toplevel(master=registration_window)
     sub_window.title("Incorrecte invoer")
@@ -60,66 +61,41 @@ def check_entries(entries):
     house_number = entries['house_number'].get()
     postal_code = entries['postal_code'].get()
     phone_number = entries['phone_number'].get()
-    # Here we start validating our data. Using this construction means we don't validate the rest of the data if the
-    # first variable is invalid.
+    # Here we start validating our data. Using this construction means we don't validate the rest of the data if,
+    # for example, the first variable is invalid. Instead it immediately jumps to a pop-up stating which entry is wrong.
     if not Validate.string(name):
         sub_incorrect_data('naam')
     elif not Validate.string(street):
         sub_incorrect_data('straat')
-    elif not Validate.huis_nr(house_number):
+    elif not Validate.huisNr(house_number):
         sub_incorrect_data('huisnummer')
     elif not Validate.postcode(postal_code):
         sub_incorrect_data('postcode')
-    elif not Validate.tel_nr(phone_number):
+    elif not Validate.telNr(phone_number):
         sub_incorrect_data('telefoonnummer')
     else:
       # With our data being valid we start a pop-up containing a security code to send to Telegram.
-        sub_personal_code(registration.send_msg_to_nr(phone_number))
+        sub_personal_code(registration.create_confirmation_code())
+        add_to_database()
 
-# Todo - Add comments / documentation
-def registration_init():
+
+def add_to_database(database, data):
     """
 
-    :return:
+    :param database: instance of a database handler
+    :param data: dictionary containing relevant data for registration
+    :return: whether the method succeeded or not
     """
-    # Default settings:
-    global registration_window
-    registration_window = Tk()
-    registration_window.title("NS Fietsenstalling")
-
-    # widget creation
-    name_label = Label(registration_window, text='Naam: ').grid(row=0, sticky=W)
-    name_entry = Entry(registration_window)
-    name_entry.grid(row=0, column=1)
-
-    street_label = Label(registration_window, text='Straat: ').grid(row=1, sticky=W)
-    street_entry = Entry(registration_window)
-    street_entry.grid(row=1, column=1)
-
-    house_nr_label = Label(registration_window, text='Huisnummer: ').grid(row=2, sticky=W)
-    house_nr_entry = Entry(registration_window)
-    house_nr_entry.grid(row=2, column=1)
-
-    postal_code_label = Label(registration_window, text='Postcode: ').grid(row=3, sticky=W)
-    postal_code_entry = Entry(registration_window)
-    postal_code_entry.grid(row=3, column=1)
-
-    phone_nr_label = Label(registration_window, text='Tel.nummer: ').grid(row=4, sticky=W)
-    phone_nr_entry = Entry(registration_window)
-    phone_nr_entry.insert(END, '06-')
-    phone_nr_entry.grid(row=4, column=1)
-
-    user_dict = {'uid': registration.randomID(),
-                 'name': name_entry,
-                 'street': street_entry,
-                 'house_number': house_nr_entry,
-                 'postal_code': postal_code_entry,
-                 'phone_number': phone_nr_entry}
-    # When the submit button is clicked, entries are checked for validity.
-    submit_button = Button(registration_window, text="submit", command=lambda: check_entries(user_dict)).grid(row=5, column=1, sticky=E)
-
-    # Init registration_window
-    registration_window.mainloop()
+    '''
+    This block of code will be the database transition
+        {'sticker': randomID(),
+            'name': data['name'],
+            'street': data['street'],
+            'house_number': data['house_number'],
+            'postal_code': data['postal_code'],
+            'phone_number': data['phone_number']}
+    '''
+    return False
 
 
 def startScreen():
@@ -149,7 +125,6 @@ def startScreen():
     buttonRetrieve = Button(master=root, text='Ophalen').grid(row=3, column=0)
 
     # Adding 'Algemene Informatie'-button
-    # ToDo : Add command to button
     buttonInfo = Button(master=root, text='Algemene Informatie', command=algemene_info).grid(row=4, column=0)
 
     # Adding 'Persoonlijke Informatie'-button
