@@ -20,10 +20,15 @@ class GUI(object):
         # Assign a title to the screen
         self.root.title('Fietsenstalling beheer')
 
+        # Fixed screen size
+        self.root.geometry("450x300")
+
         # Welcome message
         self.message = tkinter.Label(
             master=self.root,
-            text='Welkom bij de fietsenstalling! \nKies één van de volgende opties.'
+            text='\nWelkom bij de fietsenstalling! \nKies één van de volgende opties.\n',
+            width=50,
+            bg='yellow'
         )
         self.message.grid(row=0, column=0)
 
@@ -31,7 +36,9 @@ class GUI(object):
         self.buttonRegister = tkinter.Button(
             master=self.root,
             text='Registeren',
-            command=lambda: registration.registrationInit(database)
+            command=lambda: registration.registrationInit(database),
+            width=15,
+            pady=8,
         )
         self.buttonRegister.grid(row=1, column=0)
 
@@ -39,7 +46,9 @@ class GUI(object):
         # ToDo : Add command to button
         self.buttonStore = tkinter.Button(
             master=self.root,
-            text='Stallen'
+            text='Stallen',
+            width=15,
+            pady=8
         )
         self.buttonStore.grid(row=2, column=0)
 
@@ -47,7 +56,9 @@ class GUI(object):
         # ToDo : Add command to button
         self.buttonRetrieve = tkinter.Button(
             master=self.root,
-            text='Ophalen'
+            text='Ophalen',
+            width=15,
+            pady=8
         )
         self.buttonRetrieve.grid(row=3, column=0)
 
@@ -55,7 +66,9 @@ class GUI(object):
         self.buttonInfo = tkinter.Button(
             master=self.root,
             text='Algemene Informatie',
-            command=AlgemeneInfo.algemeneInfo
+            command=AlgemeneInfo.algemeneInfo,
+            width=15,
+            pady=8
         )
         self.buttonInfo.grid(row=4, column=0)
 
@@ -63,7 +76,9 @@ class GUI(object):
         # ToDo : Add command to button
         self.buttonPersonalInfo = tkinter.Button(
             master=self.root,
-            text='Persoonlijke Informatie'
+            text='Persoonlijke Informatie',
+            width=15,
+            pady=8
         )
         self.buttonPersonalInfo.grid(row=5, column=0)
 
