@@ -1,7 +1,5 @@
 import sqlite3
-
-TABLE_USERS = 'users'
-TABLE_ENTRIES = 'entries'
+from ProjectData import Constants
 
 class DatabaseHandler(object):
     """This is the DatabaseHandler class.
@@ -59,9 +57,12 @@ class DatabaseHandler(object):
         :return: either the errormessage or the result of fetchAll
         """
         try:
+            # Execute SQL
             self.cursor.execute(sql)
-        except Exception as e:
-            return str(e.args)
+        except:
+            # We only want to use the actual error message here when debugging
+            # for the final application we do not wish to store any Exception messages.
+            return False
         return self.cursor.fetchall()
 
     def insertNewItem(self, dataDict, table):
