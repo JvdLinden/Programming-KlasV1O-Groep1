@@ -20,9 +20,6 @@ class GUI(object):
         # Assign a title to the screen
         self.root.title('Fietsenstalling beheer')
 
-        # Fixed screen size
-        self.root.geometry("450x300")
-
         # Welcome message
         self.message = tkinter.Label(
             master=self.root,
