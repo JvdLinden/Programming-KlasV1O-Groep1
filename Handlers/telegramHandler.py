@@ -26,11 +26,11 @@ class TelegramHandler(object):
         :param message: the message that should be sent to the user
         :return: the message data or an error
         """
-        #Attempt to send a message
+        # Attempt to send a message
         try:
             return self.bot.sendMessage(chat_id, message, parse_mode='Markdown')
 
-        #Catch TelegramErrors (i.e. 'chat not found')
+        # Catch TelegramErrors (i.e. 'chat not found')
         except telepot.exception.TelegramError as error:
             return error
 
@@ -110,11 +110,25 @@ class TelegramHandler(object):
 
         return {
             'code': code,
-            'id' :chat_id,
+            'id': chat_id,
             'uid': update_id,
-            'text':text
+            'text': text
         }
 
     def registerUpdateID(self, id):
         if id > self.current_response:
             self.current_response = id
+
+    def generateRegisterMessageFromKey(self, userKey):
+        """Generate a message to display to the user.
+        The message contains the bot's name and the registrration key
+
+        :param userKey: ke to convert to registration key
+        :return: (registrationkey), (displayString)
+        """
+        _finalString = 'Bedankt voor uw registratie!\n Om uw registratie succesvol af te ronden moet u geistreren bij onze telegrambot.\n'
+        _finalString += 'Bot: {}\n'.format(Constants.BOT_NAME)
+        _code = Constants.CODE_HEADER_REGISTER + userKey
+        _finalString += 'Bericht: {}\n'.format(_code)
+
+        return _code, _finalString

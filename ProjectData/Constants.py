@@ -18,4 +18,4 @@ BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 # Code creation
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
 
-CODE_HEADER_REGISTER = '#'
+CODE_HEADER_REGISTER = 'REG:'
