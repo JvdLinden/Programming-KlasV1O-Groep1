@@ -30,16 +30,18 @@ class CombinedHandler(object):
         :return: the result of the insert query
         """
 
-        # check for duplicaes via de update_id number
+        # check for duplicates via de update_id number
         _sql = "SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_UPDATES, update['update_id'])
         _result = self.database.runQuery(_sql)
 
 
         if not _result:
+            # if there are no results, insert a new row into the database
             message = update['message']
             chat = message['chat']
             from_user = message['from']
 
+            # create a dict, the databaseHandler can convert a dict into an sql-Insert query
             _dict = {
                 'name': from_user['first_name'] + '' + from_user['last_name'],
                 'chat_id': chat['id'],
@@ -49,6 +51,7 @@ class CombinedHandler(object):
                 'update_id': update['update_id'],
             }
 
+            #register the new updateId to the telegramHandler object
             self.telegram.registerUpdateID(update['update_id'])
 
             _result = self.database.insertNewItem(_dict, Constants.TABLE_UPDATES)
