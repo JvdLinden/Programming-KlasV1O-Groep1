@@ -5,6 +5,7 @@ from enum import Enum
 from ProjectData import Constants
 from tkinter import messagebox
 from Handlers import combinedHandler
+from specialPopUp import SpecialPopUp
 
 
 class Info(Enum):  # Class specifying in what order the information during registration is processed
@@ -83,15 +84,12 @@ class RegistrationForm(object):
     def stop(self):
         self.registrationWindow.destroy()
 
-    # TODO: send the code created here to Telegram loop
     def createConfirmationCode(self):
         """Creates a confirmation code to be used in Telegram verification.
 
         :return: the confirmation code.
         """
-        confirmationCode = Validate.makeRandomCode(Constants.LENGTH_RANDOM_CONFIRMATION_CODE, Validate.CodeType.ALL)
-        #  TELEGRAM CODE HERE
-        return confirmationCode
+        return Validate.makeRandomCode(Constants.LENGTH_RANDOM_CONFIRMATION_CODE, Validate.CodeType.ALL)
 
     def createBikeCode(self):
         """
@@ -114,9 +112,11 @@ class RegistrationForm(object):
         :return:
         """
 
-        messagebox.showinfo("Title",
-                            "Stuur het volgende Telegram-bericht: \n%s\n"
-                            "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
+        SpecialPopUp(self.registrationWindow,
+                     "Title",
+                     "Stuur het volgende Telegram-bericht naar %s op Telegram." % Constants.BOT_NAME,
+                     "\n%s\n" % registration_code
+        )
 
 
     def subIncorrectData(self, incorrect_entry):
@@ -133,7 +133,6 @@ class RegistrationForm(object):
         ok_button = tkinter.Button(subWindow, text="OK", command=subWindow.destroy)
         incorrectLabel.pack()
         ok_button.pack()
-
 
     def checkEntries(self, entries):
         """
@@ -185,7 +184,12 @@ class RegistrationForm(object):
                 self.myCombinedHandler.handleUpdates()
                 chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
 
-            print('Done')
             self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
-            messagebox.showinfo("Succes!", "U bent Geregistreerd!")
+
+            SpecialPopUp(self.registrationWindow,
+                         "Title",
+                         "U bent Geregistreerd!\nHieronder volgt uw persoonlijke code, bewaar deze goed!",
+                         userDict['bike_key']
+            )
+
             self.registrationWindow.destroy()
