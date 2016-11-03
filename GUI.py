@@ -3,6 +3,8 @@ import tkinter
 from Handlers import databaseHandler, telegramHandler
 from ProjectData import Constants
 import registration
+import personal_info
+
 
 class GUI(object):
 
@@ -75,7 +77,8 @@ class GUI(object):
             master=self.root,
             text='Persoonlijke Informatie',
             width=17,
-            pady=8
+            pady=8,
+            command= personal_info.personal_info_screen
         )
         self.buttonPersonalInfo.grid(row=5)
 
