@@ -23,6 +23,7 @@ def Personal_info_validation():
     if validation != False:
         personal_info_screen()
 
+    # ToDo: add Error message????
     else:
         pass
 
