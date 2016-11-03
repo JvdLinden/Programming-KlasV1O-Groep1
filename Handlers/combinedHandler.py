@@ -1,6 +1,6 @@
 from ProjectData import Constants
 from Handlers import telegramHandler, databaseHandler
-from pprint import pprint
+import time
 
 class CombinedHandler(object):
     """
@@ -112,13 +112,41 @@ class CombinedHandler(object):
             return False
 
     def storeBike(self, bike_key):
-        _result = self.database.insertNewItem(
-            {'bike_key': bike_key},
-            Constants.TABLE_ENTRIES
-        )
-        print('RESULT >> ' + str(_result))
-        return _result
+        # check if bike isn't already stalled
+        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved = 0".format(Constants.TABLE_ENTRIES, bike_key)
+        _result = self.database.runQuery(_sql)
+        # actual check
+        if _result:
+            return 'Uw fiets is al aanwezig in onze stalling'
+        else:
+            _result = self.database.insertNewItem(
+                {'bike_key': bike_key, 'date_stored': str(time.strftime('%x %X'))},
+                Constants.TABLE_ENTRIES
+            )
+            print('RESULT storeBike >> {}'.format( _result))
+            _user = self.database.getChatIDFromPersonalCode(bike_key)
+            _message = "Uw fiets is gestald!\n - Uw Fietsenstalling beheerder"
+            self.telegram.sendMessageToUser(_user, _message)
+            return 'U heeft uw fiets gestald'
 
+    def retrieveBike(self, bike_key):
+        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES, bike_key)
+        _result = self.database.runQuery(_sql)
+        self.database.saveDatabase()
+
+        if len(_result) > 0:
+            _sql = "UPDATE {} SET retrieved=1, date_retrieved='{}' WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES,time.strftime('%x %X'),  bike_key)
+            _result = self.database.runQuery(_sql)
+            self.database.saveDatabase()
+            self.sendBikeRetreivedMessage(bike_key)
+            return True
+        else:
+            return False
+
+    def sendBikeRetreivedMessage(self, bike_key):
+        _user = self.database.getChatIDFromPersonalCode(bike_key)
+        _message = "U heeft uw fiets opgehaald!\n - Uw Fietsenstalling beheerder"
+        self.telegram.sendMessageToUser(_user, _message)
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*

@@ -62,6 +62,7 @@ class DatabaseHandler(object):
         except Exception as e:
             # We only want to use the actual error message here when debugging
             # for the final application we do not wish to store any Exception messages.
+            print(sql)
             print(e.args)
             return False
         _result = self.cursor.fetchall()

@@ -179,25 +179,30 @@ class RegistrationForm(object):
             self.myCombinedHandler.registerNewUser(userDict)
 
             # Loop to keep checking if reg key has been entered, when successful res gives chat ID
-            chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
+            _chatId = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
             _count = 0
-            while not chatID:
+            while not _chatId:
                 _count += 1
                 if _count > Constants.REGISTRATION_TIMEOUT:
                     break
 
-                print('running')
                 self.myCombinedHandler.handleUpdates()
-                chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
+                _chatId = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
 
-            if chatID:
-                self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
+            if _chatId:
+                self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, _chatId)
+
 
                 SpecialPopUp(self.registrationWindow,
                              "Title",
                              "U bent Geregistreerd!\nHieronder volgt uw persoonlijke code, bewaar deze goed!",
                              userDict['bike_key']
                              )
+                _message = 'U bent geregistreerd bij onze fitesenstalling. \n' \
+                           'Hieronder vind u uw persoonlijke toegangscode, bewaarde deze goed!\n' \
+                           '' + userDict['bike_key']
+
+                combinedHandler.telegram.sendMessageToUser(_chatId, _message)
             else:
                 messagebox.showinfo("TIME OUT", "De registratie is op dit moment niet gelukt, probeer het later nog eens.")
             self.registrationWindow.destroy()

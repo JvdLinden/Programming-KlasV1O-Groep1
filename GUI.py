@@ -5,6 +5,7 @@ from ProjectData import Constants
 import registration
 import personal_info
 import stallen
+import ophalen
 
 
 class GUI(object):
@@ -56,6 +57,7 @@ class GUI(object):
         self.buttonRetrieve = tkinter.Button(
             master=self.root,
             text='Ophalen',
+            command = lambda: ophalen.Ophalen(self.myCombinedHandler, self.root),
             width=17,
             pady=8
         )

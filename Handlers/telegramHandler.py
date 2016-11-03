@@ -43,7 +43,7 @@ class TelegramHandler(object):
         """
         _code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(Constants.LENGTH_PERSONAL_CODE))
 
-        _message = "Beste gebruiker, hierbij de bevestigingscode die u moet ingeven bij het ophalen van uw fiets\n\nUw Code is: {}".format(_code)
+        _message = "Beste gebruiker, hierbij de bevestigingscode die u moet ingeven.\n\nUw Code is: {}".format(_code)
 
         self.sendMessageToUser(chatID, _message)
         return _code
