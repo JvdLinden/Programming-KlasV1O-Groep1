@@ -78,12 +78,15 @@ class RegistrationForm(object):
     def stop(self):
         self.registrationWindow.destroy()
 
+    # TODO: send the code created here to Telegram loop
     def createConfirmationCode(self):
         """Creates a confirmation code to be used in Telegram verification.
 
         :return: the confirmation code.
         """
-        return Validate.makeRandomCode(Constants.RANDOM_CONFIRMATION_CODE_LENGTH, Validate.CodeType.ALL)
+        confirmationCode = Validate.makeRandomCode(Constants.RANDOM_CONFIRMATION_CODE_LENGTH, Validate.CodeType.ALL)
+        #  TELEGRAM CODE HERE
+        return confirmationCode
 
 
     def randomID(self):
@@ -105,14 +108,26 @@ class RegistrationForm(object):
         sub_window.title("Popup")
 
         # Widget creation
-        codeLabel = tkinter.Label(master=sub_window, text="Voer de ontvangen code in: ")
+        codeLabel = tkinter.Label(master=sub_window, text="Stuur een Telegram-bericht naar %s. "
+                                                          "De bot stuurt een bericht terug met uw persoonlijke code. "
+                                                          "Voer deze hier in:" % Constants.BOT_NAME)
         codeLabel.grid(row=0, sticky=tkinter.W)
 
         codeEntry = tkinter.Entry(sub_window,)
-        codeEntry.grid(row=0, column=1)
+        codeEntry.grid(row=1)
 
-        submitButton = tkinter.Button(sub_window, text="submit")
-        submitButton.grid(row=1, column=1)
+        submitButton = tkinter.Button(sub_window, text="submit",
+                                      command=lambda: self.checkPersonalCode(codeEntry.get()))
+        submitButton.grid(row=2)
+
+    # TODO: Write this method!
+    def checkPersonalCode(self, input_code):
+        """
+        method to validate user's input during Telegram verification.
+        :param input_code: The input code as typed by the user.
+        :return: none
+        """
+        pass
 
     def subIncorrectData(self, incorrect_entry):
         """
