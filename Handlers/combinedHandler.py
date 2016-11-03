@@ -69,20 +69,27 @@ class CombinedHandler(object):
         _result = self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, registrationKey))
 
         if _result:
+            # list the update from which we retrieved the data as 'used' in the database.
+            self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(Constants.TABLE_UPDATES, registrationKey))
+
             # sqlite database returns a list with tuples containing row data (tuples in list).
             #  we only expect 1 answer so we need the item on position 0 of the first list and position 0 of the tuple in said list
-            self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(Constants.TABLE_UPDATES, registrationKey))
             return _result[0][0]
         else:
             return False
 
     def checkIfRegistrationKeyHasBeenUsed(self, key):
+        """
+
+        :param key:
+        :return:
+        """
         if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, key)):
             return True
         return False
 
     def retrievePersonalData(self, bikeKey):
-        """Retreive the eprsonal data for a user via het special identification key *bikeKey*
+        """Retreive the presonal data for a user via het special identification key *bikeKey*
 
         :param bikeKey: the special
         :return: the data in a tuple
@@ -102,7 +109,7 @@ class CombinedHandler(object):
                 'name': <username>,
                 'street': <street>,
                 'house_nr':<house_nr>,
-                'house_nr_ext':<house_nr_ext>',
+                'postal_code':<house_nr_ext>',
                 'phone_nr':<phone_nr>,
                 'reg_key':<unique registration key>,
                 'bike_key':<unique bike identificaiton key>,
