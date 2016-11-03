@@ -2,6 +2,7 @@ import Validate
 from ProjectData import Constants
 import tkinter
 from enum import Enum
+from Handlers import combinedHandler
 
 
 class Info(Enum):  # Class specifying in what order the information during registration is processed
@@ -14,7 +15,7 @@ class Info(Enum):  # Class specifying in what order the information during regis
 
 class RegistrationForm(object):
 
-    def __init__(self, database):
+    def __init__(self):
         """
         The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
         :return: none
@@ -84,19 +85,25 @@ class RegistrationForm(object):
 
         :return: the confirmation code.
         """
-        confirmationCode = Validate.makeRandomCode(Constants.RANDOM_CONFIRMATION_CODE_LENGTH, Validate.CodeType.ALL)
+        confirmationCode = Validate.makeRandomCode(Constants.LENGTH_RANDOM_CONFIRMATION_CODE, Validate.CodeType.ALL)
         #  TELEGRAM CODE HERE
         return confirmationCode
 
 
+    def createBikeCode(self):
+        """
+
+        :return:
+        """
+        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE)
     def randomID(self):
         """Creates an identification code to be printed on the sticker stuck to the bike.
 
         :return: the identification code.
         """
-        return Validate.makeRandomCode(Constants.LENGTH_VALIDATION_CODE, Validate.CodeType.DIGITS)
+        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.DIGITS)
 
-    def subPersonalCode(self, confirmationCode):
+    def subPersonalCode(self):
         """
         A pop-up containing a personal code for the user which they have to text to Telegram.
         :param confirmationCode: The code in question
@@ -157,6 +164,7 @@ class RegistrationForm(object):
         houseNumber = entries['house_number'].get()
         postalCode = entries['postal_code'].get()
         phoneNumber = entries['phone_number'].get()
+
         # Here we start validating our data. Using this construction means we don't validate the rest of the data if,
         # for example, the first variable is invalid. Instead it immediately jumps to a pop-up stating which entry is wrong.
         if not Validate.string(name):
@@ -171,9 +179,19 @@ class RegistrationForm(object):
             self.subIncorrectData('telefoonnummer')
         else:
             # With our data being valid we start a pop-up containing a security code to send to Telegram.
-            self.subPersonalCode(self.createConfirmationCode())
-
-            # add to database
+            registrationCode = self.createConfirmationCode()
+            self.subPersonalCode(registrationCode)
+            userDict = {
+                'name': name,
+                'street': street,
+                'house_nr': houseNumber,
+                'house_nr_ext': houseNumber,
+                'phone_nr': phoneNumber,
+                'reg_key': registrationCode,
+                'bike_key': self.createBikeCode()
+            }
+            CH = combinedHandler.CombinedHandler
+            CH.registerNewUser(CH, userDict)
 
 
 

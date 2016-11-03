@@ -41,7 +41,7 @@ class TelegramHandler(object):
         :param chatID: the chat ID related to the user we want to message
         :return: the code sent to the user
         """
-        _code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(Constants.LENGTH_VALIDATION_CODE))
+        _code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(Constants.LENGTH_PERSONAL_CODE))
 
         _message = "Beste gebruiker, hierbij de bevestigingscode die u moet ingeven bij het ophalen van uw fiets\n\nUw Code is: {}".format(_code)
 

@@ -36,7 +36,7 @@ class GUI(object):
         self.buttonRegister = tkinter.Button(
             master=self.root,
             text='Registeren',
-            command=lambda: registration.RegistrationForm(database),
+            command=registration.RegistrationForm,
             width=50,
             bg='yellow'
         )
