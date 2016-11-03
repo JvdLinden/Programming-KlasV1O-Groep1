@@ -1,19 +1,14 @@
 from userValidator import UserValidator
 from ProjectData import Constants
-from Handlers import databaseHandler
+from Handlers import databaseHandler, telegramHandler, combinedHandler
 
 #create a DatabaseHandler object
-myDB = databaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
-
+myCH = combinedHandler.CombinedHandler(database=Constants.DATABASE_MASK, telegram=Constants.BOT_TOKEN)
 # Create a validator object (the UserValidator-object requires a DatabaseHandler)
-myObject = UserValidator(myDB)
+myObject = UserValidator(myCH)
 
 # when the validator object is done running, retrieve the value.
 newValue = myObject.getValue()
-
-#delete the objects after using! (doens't really matter though, Python wil handle this by itself
-del myDB
-del myObject
 
 # print Value
 print(newValue)

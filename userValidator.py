@@ -91,26 +91,24 @@ class UserValidator(object):
         self.__personalCode = self._entryPersonalCode.get()
 
         # Ophalen telegram chat id
-        telegramChatCode = self.__databaseHandler.getChatIDFromPersonalCode(self.__personalCode)
+        telegramChatCode = self.__combinedHandler.database.getChatIDFromPersonalCode(self.__personalCode)
 
         if telegramChatCode:
             self.__hasEnteredValidPersonalCode = True
 
-            _telegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
-
-            self.__randomCode = _telegramHandler.sendValidationCodeToUser(telegramChatCode)
+            self.__randomCode = self.__combinedHandler.telegram.sendValidationCodeToUser(telegramChatCode)
 
             _newMessage = 'Geef de ontvangen code a.u.b. in'
             self._labelMessage.configure(text=_newMessage)
 
         self._entryPersonalCode.delete(0, tkinter.END)
 
-    def __init__(self, database):
+    def __init__(self, combinedHandler):
         """
             Constructor
         """
 
-        self.__databaseHandler = database
+        self.__combinedHandler = combinedHandler
 
         self._screenRoot = tkinter.Tk()
         self._screenRoot.title('Fiets stallen')
