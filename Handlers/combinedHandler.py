@@ -16,17 +16,24 @@ class CombinedHandler(object):
         :param database: de database waarin de updates moeten worden opgeslagen
         :return: nothing
         """
-        # zorgen dat de code stop wanneer er niets te verwerken valt
+        # only handle updates if there are any
         if self.telegram.hasNewUpdates():
             updates = self.telegram.getNewUpdates()
 
             for update in updates:
-                self.storeUpdate(update)
+                self.__storeUpdate(update)
 
-    def storeUpdate(self, update):
+    def __storeUpdate(self, update):
+        """Private function to store all relevant data of an update into our database
 
+        :param update: the update to store
+        :return: the result of the insert query
+        """
+
+        # check for duplicaes via de update_id number
         _sql = "SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_UPDATES, update['update_id'])
         _result = self.database.runQuery(_sql)
+
 
         if not _result:
             message = update['message']
