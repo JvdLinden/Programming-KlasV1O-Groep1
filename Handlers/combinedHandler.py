@@ -78,11 +78,11 @@ class CombinedHandler(object):
         else:
             return False
 
-    def checkIfRegistrationKeyHasBeenUsed(self, key):
-        """
+    def checkIfRegistrationKeyExistsInUpdates(self, key):
+        """This function check if the geiven *key* has been newly - entered by  a user
 
-        :param key:
-        :return:
+        :param key: the key to find
+        :return: True if found, False if not
         """
         if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, key)):
             return True
