@@ -91,6 +91,7 @@ class RegistrationForm(object):
         """
         return Validate.makeRandomCode(Constants.LENGTH_RANDOM_CONFIRMATION_CODE, Validate.CodeType.ALL)
 
+    # todo Dit invullen
     def createBikeCode(self):
         """
 
@@ -178,18 +179,24 @@ class RegistrationForm(object):
 
             # Loop to keep checking if reg key has been entered, when successful res gives chat ID
             chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
-
+            _count = 0
             while not chatID:
+                _count += 1
+                if _count > Constants.REGISTRATION_TIMEOUT:
+                    break
+
                 print('running')
                 self.myCombinedHandler.handleUpdates()
                 chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
 
-            self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
+            if chatID:
+                self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
 
-            SpecialPopUp(self.registrationWindow,
-                         "Title",
-                         "U bent Geregistreerd!\nHieronder volgt uw persoonlijke code, bewaar deze goed!",
-                         userDict['bike_key']
-            )
-
+                SpecialPopUp(self.registrationWindow,
+                             "Title",
+                             "U bent Geregistreerd!\nHieronder volgt uw persoonlijke code, bewaar deze goed!",
+                             userDict['bike_key']
+                             )
+            else:
+                messagebox.showinfo("TIME OUT", "De registratie is op dit moment niet gelukt, probeer het later nog eens.")
             self.registrationWindow.destroy()
