@@ -1,5 +1,6 @@
 import telepot
-import string, random
+import string
+import random
 from ProjectData import Constants
 
 
@@ -139,7 +140,7 @@ class TelegramHandler(object):
         :param database: de database waarin de updates moeten worden opgeslagen
         :return: nothing
         """
-        #zorgen dat de code stop wanneer er niets te verwerken valt
+        # zorgen dat de code stop wanneer er niets te verwerken valt
         if self.hasNewUpdates():
             updates = self.getNewUpdates()
 
