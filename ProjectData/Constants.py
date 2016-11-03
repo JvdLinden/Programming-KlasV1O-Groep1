@@ -2,6 +2,8 @@
 DATABASE_MASK = '../applicationDatabase.db'
 DATABASE = 'applicationDatabase.db'
 
+DATABASE_SHARED = 'sharedDB.db'
+
 #VALIDATION STUFF
 MAX_LOGIN_ATTEMPTS = 3
 LENGTH_VALIDATION_CODE = 8

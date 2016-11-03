@@ -115,3 +115,7 @@ class TelegramHandler(object):
             'uid': update_id,
             'text':text
         }
+
+    def registerUpdateID(self, id):
+        if id > self.current_response:
+            self.current_response = id
