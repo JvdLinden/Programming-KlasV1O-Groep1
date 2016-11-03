@@ -129,4 +129,5 @@ class CombinedHandler(object):
         :return: True (succes), False (failure)
         """
         _result = self.database.insertNewItem(userData, Constants.TABLE_USERS)
+        self.database.saveDatabase()
         return _result

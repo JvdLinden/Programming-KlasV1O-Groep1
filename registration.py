@@ -3,6 +3,7 @@ import tkinter
 import time
 from enum import Enum
 from ProjectData import Constants
+from tkinter import messagebox
 from Handlers import combinedHandler
 
 
@@ -112,20 +113,11 @@ class RegistrationForm(object):
         :param confirmationCode: The code in question
         :return:
         """
-        # Default subscreen settings
-        sub_window = tkinter.Toplevel(master=self.registrationWindow)
-        sub_window.lift()
-        sub_window.title("Popup")
 
-        # Widget creation
-        codeLabel = tkinter.Label(master=sub_window, text="Stuur het volgende Telegram-bericht: \n%s\n"
-                                                          "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
-        codeLabel.grid(row=0, sticky=tkinter.W)
+        messagebox.showinfo("Title",
+                            "Stuur het volgende Telegram-bericht: \n%s\n"
+                            "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
 
-        submitButton = tkinter.Button(sub_window, text="Code Verzonden? klik hier",
-                                      command=sub_window.destroy)
-        submitButton.grid(row=2)
-        sub_window.mainloop()
 
     def subIncorrectData(self, incorrect_entry):
         """
@@ -171,7 +163,9 @@ class RegistrationForm(object):
         else:
             # With our data being valid we start a pop-up containing a security code to send to Telegram.
             registrationCode = self.createConfirmationCode()
+
             self.subPersonalCode(registrationCode)
+
             # Format data for database
             userDict = {
                 'name': name,
@@ -182,13 +176,16 @@ class RegistrationForm(object):
                 'reg_key': registrationCode,
                 'bike_key': self.createBikeCode()
             }
-            #Register user into database, expecting reg key soon
-            self.myCombinedHandler.registerNewUser(userDict)
 
             # Loop to keep checking if reg key has been entered, when successful res gives chat ID
-            chatID = self.myCombinedHandler.checkIfRegistrationKeyExistsInUpdates(registrationCode)
-            while not chatID:
-                time.sleep(1)
-                chatID = self.myCombinedHandler.checkIfRegistrationKeyExistsInUpdates(registrationCode)
-            self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
+            chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
 
+            while not chatID:
+                print('running')
+                self.myCombinedHandler.handleUpdates()
+                chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
+
+            print('Done')
+            self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
+            messagebox.showinfo("Succes!", "U bent Geregistreerd!")
+            self.registrationWindow.destroy()
