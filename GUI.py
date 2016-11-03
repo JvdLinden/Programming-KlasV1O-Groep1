@@ -1,4 +1,5 @@
-from AlgemeneInfo import *
+import AlgemeneInfo
+import tkinter
 from Handlers import databaseHandler, telegramHandler
 from ProjectData import Constants
 import registration
@@ -14,20 +15,20 @@ class GUI(object):
         self.telegram = telegram
 
         # Create a root screen for the GUI to add items into
-        self.root = Tk()
+        self.root = tkinter.Tk()
 
         # Assign a title to the screen
         self.root.title('Fietsenstalling beheer')
 
         # Welcome message
-        self.message = Label(
+        self.message = tkinter.Label(
             master=self.root,
             text='Welkom bij de fietsenstalling! \nKies één van de volgende opties.'
         )
         self.message.grid(row=0, column=0)
 
         # Adding 'Registreren'-button
-        self.buttonRegister = Button(
+        self.buttonRegister = tkinter.Button(
             master=self.root,
             text='Registeren',
             command=lambda: registration.registration_init(database)
@@ -36,7 +37,7 @@ class GUI(object):
 
         # Adding 'Stallen'-button
         # ToDo : Add command to button
-        self.buttonStore = Button(
+        self.buttonStore = tkinter.Button(
             master=self.root,
             text='Stallen'
         )
@@ -44,23 +45,23 @@ class GUI(object):
 
         # Adding 'Ophalen'-button
         # ToDo : Add command to button
-        self.buttonRetrieve = Button(
+        self.buttonRetrieve = tkinter.Button(
             master=self.root,
             text='Ophalen'
         )
         self.buttonRetrieve.grid(row=3, column=0)
 
         # Adding 'Algemene Informatie'-button
-        self.buttonInfo = Button(
+        self.buttonInfo = tkinter.Button(
             master=self.root,
             text='Algemene Informatie',
-            command=algemene_info
+            command=AlgemeneInfo.algemene_info
         )
         self.buttonInfo.grid(row=4, column=0)
 
         # Adding 'Persoonlijke Informatie'-button
         # ToDo : Add command to button
-        self.buttonPersonalInfo = Button(
+        self.buttonPersonalInfo = tkinter.Button(
             master=self.root,
             text='Persoonlijke Informatie'
         )
