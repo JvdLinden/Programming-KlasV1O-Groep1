@@ -69,8 +69,8 @@ class CombinedHandler(object):
         _result = self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, registrationKey))
 
         if _result:
-            # sqlite database returns a tuple with rows containing row data (tuples in tuples).
-            #  we only expect 1 answer so we need the item on position 0 of the first tuple and position 0 of the tuple on position 0 of the first tuple.
+            # sqlite database returns a list with tuples containing row data (tuples in list).
+            #  we only expect 1 answer so we need the item on position 0 of the first list and position 0 of the tuple in said list
             self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(Constants.TABLE_UPDATES, registrationKey))
             return _result[0][0]
         else:
@@ -80,6 +80,20 @@ class CombinedHandler(object):
         if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, key)):
             return True
         return False
+
+    def retrievePersonalData(self, bikeKey):
+        """Retreive the eprsonal data for a user via het special identification key *bikeKey*
+
+        :param bikeKey: the special
+        :return: the data in a tuple
+        """
+        _sql = "SELECT * FROM {} WHERE bike_id LIKE '%{}%'".format(Constants.TABLE_USERS, bikeKey)
+        _result = self.database.runQuery(_sql)
+        if _result:
+            return _result
+        else:
+            return False
+
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*
@@ -94,8 +108,8 @@ class CombinedHandler(object):
                 'bike_key':<unique bike identificaiton key>,
             }
 
-        :param userData: required userdata
-        :return: True (succes, False (failure)
+        :param userData: required user data
+        :return: True (succes), False (failure)
         """
         _result = self.database.insertNewItem(userData, Constants.TABLE_USERS)
         return _result
