@@ -1,6 +1,6 @@
 import AlgemeneInfo
 import tkinter
-from Handlers import databaseHandler, telegramHandler
+from Handlers import combinedHandler
 from ProjectData import Constants
 import registration
 import personal_info
@@ -8,13 +8,12 @@ import personal_info
 
 class GUI(object):
 
-    def __init__(self, database, telegram):
+    def __init__(self, myCombinedHandler):
         """Create the GUI for the main screen.
 
         :return: an GUI object
         """
-        self.database = database
-        self.telegram = telegram
+        self.myCombinedHandler = myCombinedHandler
 
         # Create a root screen for the GUI to add items into
         self.root = tkinter.Tk()
@@ -35,7 +34,7 @@ class GUI(object):
         self.buttonRegister = tkinter.Button(
             master=self.root,
             text='Registeren',
-            command=lambda: registration.RegistrationForm(database),
+            command=lambda: registration.RegistrationForm(myCombinedHandler),
             width=17,
             pady=8
         )
@@ -88,11 +87,8 @@ class GUI(object):
     def stop(self):
         self.root.destroy()
 
-
-myDatabaseHandler = databaseHandler.DatabaseHandler(Constants.DATABASE)
-myTelegramHandler = telegramHandler.TelegramHandler(Constants.BOT_TOKEN, 0)
-
-screen = GUI(database=databaseHandler, telegram=myTelegramHandler)
+ch = combinedHandler.CombinedHandler(Constants.DATABASE_SHARED, Constants.BOT_TOKEN)
+screen = GUI(ch)
 screen.start()
 
 

@@ -1,7 +1,8 @@
 import Validate
-from ProjectData import Constants
 import tkinter
+import time
 from enum import Enum
+from ProjectData import Constants
 from Handlers import combinedHandler
 
 
@@ -15,11 +16,13 @@ class Info(Enum):  # Class specifying in what order the information during regis
 
 class RegistrationForm(object):
 
-    def __init__(self):
+    def __init__(self, myCombinedHandler):
         """
         The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
         :return: none
         """
+        self.myCombinedHandler = myCombinedHandler
+
         # Default settings:
         self.registrationWindow = tkinter.Tk()
         self.registrationWindow.title("NS Fietsenstalling")
@@ -89,13 +92,13 @@ class RegistrationForm(object):
         #  TELEGRAM CODE HERE
         return confirmationCode
 
-
     def createBikeCode(self):
         """
 
         :return:
         """
-        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE)
+        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.ALL)
+
     def randomID(self):
         """Creates an identification code to be printed on the sticker stuck to the bike.
 
@@ -103,7 +106,7 @@ class RegistrationForm(object):
         """
         return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.DIGITS)
 
-    def subPersonalCode(self):
+    def subPersonalCode(self, registration_code):
         """
         A pop-up containing a personal code for the user which they have to text to Telegram.
         :param confirmationCode: The code in question
@@ -115,17 +118,18 @@ class RegistrationForm(object):
         sub_window.title("Popup")
 
         # Widget creation
-        codeLabel = tkinter.Label(master=sub_window, text="Stuur een Telegram-bericht naar %s. "
-                                                          "De bot stuurt een bericht terug met uw persoonlijke code. "
-                                                          "Voer deze hier in:" % Constants.BOT_NAME)
+        codeLabel = tkinter.Label(master=sub_window, text="Stuur het volgende Telegram-bericht: \n%s\n"
+                                                          "naar %s op Telegram." % (registration_code, Constants.BOT_NAME))
         codeLabel.grid(row=0, sticky=tkinter.W)
 
+        # Todo - Waarom zit er een entry in??
         codeEntry = tkinter.Entry(sub_window,)
         codeEntry.grid(row=1)
 
         submitButton = tkinter.Button(sub_window, text="submit",
-                                      command=lambda: self.checkPersonalCode(codeEntry.get()))
+                                      command=sub_window.destroy)
         submitButton.grid(row=2)
+        sub_window.mainloop()
 
     # TODO: Write this method!
     def checkPersonalCode(self, input_code):
@@ -181,17 +185,23 @@ class RegistrationForm(object):
             # With our data being valid we start a pop-up containing a security code to send to Telegram.
             registrationCode = self.createConfirmationCode()
             self.subPersonalCode(registrationCode)
+            # Format data for database
             userDict = {
                 'name': name,
                 'street': street,
                 'house_nr': houseNumber,
-                'house_nr_ext': houseNumber,
+                'postal_code': postalCode,
                 'phone_nr': phoneNumber,
                 'reg_key': registrationCode,
                 'bike_key': self.createBikeCode()
             }
-            CH = combinedHandler.CombinedHandler
-            CH.registerNewUser(CH, userDict)
+            #Register user into database, expecting reg key soon
+            self.myCombinedHandler.registerNewUser(userDict)
 
-
+            # Loop to keep checking if reg key has been entered, when successful res gives chat ID
+            chatID = self.myCombinedHandler.checkIfRegistrationKeyExistsInUpdates(registrationCode)
+            while not chatID:
+                time.sleep(1)
+                chatID = self.myCombinedHandler.checkIfRegistrationKeyExistsInUpdates(registrationCode)
+            self.myCombinedHandler.registerChatIdToUserViaRegKey(registrationCode, chatID)
 
