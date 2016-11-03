@@ -13,6 +13,7 @@ LENGTH_VALIDATION_CODE = 8
 
 #Telegram Bot token
 BOT_TOKEN = '166998703:AAGvk0No3abHbGc9LpUpJko7WTx1DR9jURY'
+BOT_NAME = '@Fietsenstalling_Beheer_Bot'
 
 # Code creation
 RANDOM_CONFIRMATION_CODE_LENGTH = 6
