@@ -2,7 +2,6 @@ import telepot
 import string, random
 from ProjectData import Constants
 
-CODE_HEADER_REGISTER = '#'
 
 class TelegramHandler(object):
     """This class will handle all interaction with our telegram bot.
@@ -104,8 +103,8 @@ class TelegramHandler(object):
         message = update['message']
         text = message['text']
 
-        if text.startswith(CODE_HEADER_REGISTER):
-            code = text.strip(CODE_HEADER_REGISTER).split()[0]
+        if text.startswith(Constants.CODE_HEADER_REGISTER):
+            code = text.strip(Constants.CODE_HEADER_REGISTER).split()[0]
 
         chat_id = message['chat']['id']
 
