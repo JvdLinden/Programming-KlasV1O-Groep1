@@ -111,6 +111,14 @@ class CombinedHandler(object):
         else:
             return False
 
+    def storeBike(self, bike_key):
+        _result = self.database.insertNewItem(
+            {'bike_key': bike_key},
+            Constants.TABLE_ENTRIES
+        )
+        print('RESULT >> ' + str(_result))
+        return _result
+
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*

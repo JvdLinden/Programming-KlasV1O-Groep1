@@ -4,6 +4,7 @@ from Handlers import combinedHandler
 from ProjectData import Constants
 import registration
 import personal_info
+import stallen
 
 
 class GUI(object):
@@ -41,10 +42,10 @@ class GUI(object):
         self.buttonRegister.grid(row=1)
 
         # Adding 'Stallen'-button
-        # ToDo : Add command to button
         self.buttonStore = tkinter.Button(
             master=self.root,
             text='Stallen',
+            command = lambda: stallen.Stallen(self.myCombinedHandler, self.root),
             width=17,
             pady=8
         )

@@ -1,35 +1,39 @@
 from userValidator import UserValidator
-from ProjectData import Constants
-from Handlers import databaseHandler
-from tkinter import *
-
-def stallenValidation():
-    """
-    Show screen for input personal code and the security code
-    :return:
-    """
-    # Create Database handler object
-    dbHandler = databaseHandler.DatabaseHandler(Constants.DATABASE_MASK)
-
-    # Create validator object
-    validator = UserValidator(dbHandler)
-
-    # when the validator object is done running, retrieve the value.
-    validation = validator.getValue()
-
-    # Check if validation is succesfull or not
-    if validation != False:
+import tkinter
 
 
+class Stallen(object):
 
-    else:
-        pass
+    def stop(self):
+        self.running = False
 
-def stallen_screen():
-    # Create a window to show personal information
-    stallen_window = Tk()
+    def __init__(self, theCombinedHandler, master):
+        # validate user
+        usval = UserValidator(theCombinedHandler, master)
+        _user = usval.getValue()
+        del usval
 
-    # Title for personal information window
-    stallen_window.title('Stallen')
+        theCombinedHandler.storeBike(_user)
+
+        # Create a window to show personal information
+        self.root = tkinter.Tk()
+
+        # Title for personal information window
+        self.root.title('Stallen')
+
+
+        label = tkinter.Label(self.root, text='Uw Fiets is gestald!')
+        label.grid(row=0)
+
+        button = tkinter.Button(self.root, text='Oke', command=self.stop)
+        button.grid(row=1)
+
+        self.running = True
+        while self.running:
+            self.root.update_idletasks()
+            self.root.update()
+        self.root.destroy()
+
+
 
 

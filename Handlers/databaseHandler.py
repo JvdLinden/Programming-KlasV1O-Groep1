@@ -91,7 +91,7 @@ class DatabaseHandler(object):
         return _result
 
     def getChatIDFromPersonalCode(self, personalCode):
-        _sql = "SELECT telegram_chat_id FROM users WHERE personal_code = '{}'".format(personalCode)
+        _sql = "SELECT chat_id FROM users WHERE bike_key = '{}'".format(personalCode)
         _result = self.runQuery(_sql)
 
         if isinstance(_result, list) and len(_result) > 0:

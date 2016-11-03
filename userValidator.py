@@ -79,7 +79,7 @@ class UserValidator(object):
 
         :return:
         """
-        self._screenRoot.destroy()
+        self.running = False
 
     def validatePersonalCode(self):
         """This function will start the validation process
@@ -103,14 +103,14 @@ class UserValidator(object):
 
         self._entryPersonalCode.delete(0, tkinter.END)
 
-    def __init__(self, combinedHandler):
+    def __init__(self, combinedHandler, master):
         """
             Constructor
         """
 
         self.__combinedHandler = combinedHandler
 
-        self._screenRoot = tkinter.Tk()
+        self._screenRoot = tkinter.Toplevel(master)
         self._screenRoot.title('Fiets stallen')
 
 
@@ -140,5 +140,9 @@ class UserValidator(object):
         )
         self._buttonConfirmCode.grid(row=2)
 
-        self._screenRoot.mainloop()
+        self.running = True
+        while self.running:
+            self._screenRoot.update_idletasks()
+            self._screenRoot.update()
+        self._screenRoot.destroy()
 

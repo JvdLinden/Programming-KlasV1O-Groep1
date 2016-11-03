@@ -176,6 +176,7 @@ class RegistrationForm(object):
                 'reg_key': registrationCode,
                 'bike_key': self.createBikeCode()
             }
+            self.myCombinedHandler.registerNewUser(userDict)
 
             # Loop to keep checking if reg key has been entered, when successful res gives chat ID
             chatID = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
