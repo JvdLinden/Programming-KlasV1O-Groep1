@@ -6,6 +6,7 @@ DATABASE_SHARED = 'sharedDB.db'
 
 TABLE_USERS = 'users'
 TABLE_ENTRIES = 'entries'
+TABLE_UPDATES = 'updates'
 
 #VALIDATION STUFF
 MAX_LOGIN_ATTEMPTS = 3

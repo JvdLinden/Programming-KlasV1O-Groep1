@@ -132,3 +132,37 @@ class TelegramHandler(object):
         _finalString += 'Bericht: {}\n'.format(_code)
 
         return _code, _finalString
+
+    def handleUpdates(self, database):
+        """Verwerkt nieuwe updates in de database.
+
+        :param database: de database waarin de updates moeten worden opgeslagen
+        :return: nothing
+        """
+        #zorgen dat de code stop wanneer er niets te verwerken valt
+        if self.hasNewUpdates():
+            updates = self.getNewUpdates()
+
+            for update in updates:
+                self.storeUpdate(update, database)
+
+    def storeUpdate(self, update, database):
+
+        if not database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_USERS, update['update_id'])):
+            message = update['message']
+            chat = message['chat']
+            from_user = message['from']
+
+            _dict = {
+                'name': from_user['first_name'] + '' + from_user['last_name'],
+                'chat_id': chat['id'],
+                'date': message['date'],
+                'user_id': from_user['id'],
+                'text': message['text'],
+                'update_id': update['update_id'],
+            }
+
+            self.registerUpdateID(update['update_id'])
+
+            database.insertNewItem(_dict, Constants.TABLE_UPDATES)
+            database.saveDatabase()
