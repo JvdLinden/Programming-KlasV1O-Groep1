@@ -37,8 +37,8 @@ class GUI(object):
             master=self.root,
             text='Registeren',
             command=lambda: registration.RegistrationForm(database),
-            width=50,
-            bg='yellow'
+            width=15,
+            pady=8
         )
         self.buttonRegister.grid(row=1, column=0)
 
