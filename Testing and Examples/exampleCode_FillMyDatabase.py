@@ -52,6 +52,8 @@ while loopIsRunning:
 
         myTelegramHandler.registerUpdateID(update['update_id'])
 
+        myTelegramHandler.storeUpdate(update, myDatabaseHandler)
+
         if messageText.startswith(REGISTRATION_HEADER):
             _key = messageText.strip(REGISTRATION_HEADER).split()[0] # First element after the registration-tag
             _result = myDatabaseHandler.runQuery("SELECT id FROM {} WHERE temp_key = '{}'".format(TABLE_USERS, _key))
@@ -60,6 +62,6 @@ while loopIsRunning:
                 _sql = "UPDATE {} SET chat_id = {}, temp_key = '' WHERE temp_key = '{}'".format(TABLE_USERS, update['message']['chat']['id'], _key)
                 _result = myDatabaseHandler.runQuery(_sql)
 
-        print(myDatabaseHandler.showTableContents(TABLE_USERS))
+        print(myDatabaseHandler.showTableContents(Constants.TABLE_UPDATES))
 
         myDatabaseHandler.saveDatabase()

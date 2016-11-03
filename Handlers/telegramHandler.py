@@ -2,7 +2,6 @@ import telepot
 import string, random
 from ProjectData import Constants
 
-CODE_HEADER_REGISTER = '#'
 
 class TelegramHandler(object):
     """This class will handle all interaction with our telegram bot.
@@ -27,11 +26,11 @@ class TelegramHandler(object):
         :param message: the message that should be sent to the user
         :return: the message data or an error
         """
-        #Attempt to send a message
+        # Attempt to send a message
         try:
             return self.bot.sendMessage(chat_id, message, parse_mode='Markdown')
 
-        #Catch TelegramErrors (i.e. 'chat not found')
+        # Catch TelegramErrors (i.e. 'chat not found')
         except telepot.exception.TelegramError as error:
             return error
 
@@ -104,18 +103,66 @@ class TelegramHandler(object):
         message = update['message']
         text = message['text']
 
-        if text.startswith(CODE_HEADER_REGISTER):
-            code = text.strip(CODE_HEADER_REGISTER).split()[0]
+        if text.startswith(Constants.CODE_HEADER_REGISTER):
+            code = text.strip(Constants.CODE_HEADER_REGISTER).split()[0]
 
         chat_id = message['chat']['id']
 
         return {
             'code': code,
-            'id' :chat_id,
+            'id': chat_id,
             'uid': update_id,
-            'text':text
+            'text': text
         }
 
     def registerUpdateID(self, id):
         if id > self.current_response:
             self.current_response = id
+
+    def generateRegisterMessageFromKey(self, userKey):
+        """Generate a message to display to the user.
+        The message contains the bot's name and the registrration key
+
+        :param userKey: ke to convert to registration key
+        :return: (registrationkey), (displayString)
+        """
+        _finalString = 'Bedankt voor uw registratie!\n Om uw registratie succesvol af te ronden moet u geistreren bij onze telegrambot.\n'
+        _finalString += 'Bot: {}\n'.format(Constants.BOT_NAME)
+        _code = Constants.CODE_HEADER_REGISTER + userKey
+        _finalString += 'Bericht: {}\n'.format(_code)
+
+        return _code, _finalString
+
+    def handleUpdates(self, database):
+        """Verwerkt nieuwe updates in de database.
+
+        :param database: de database waarin de updates moeten worden opgeslagen
+        :return: nothing
+        """
+        #zorgen dat de code stop wanneer er niets te verwerken valt
+        if self.hasNewUpdates():
+            updates = self.getNewUpdates()
+
+            for update in updates:
+                self.storeUpdate(update, database)
+
+    def storeUpdate(self, update, database):
+
+        if not database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_USERS, update['update_id'])):
+            message = update['message']
+            chat = message['chat']
+            from_user = message['from']
+
+            _dict = {
+                'name': from_user['first_name'] + '' + from_user['last_name'],
+                'chat_id': chat['id'],
+                'date': message['date'],
+                'user_id': from_user['id'],
+                'text': message['text'],
+                'update_id': update['update_id'],
+            }
+
+            self.registerUpdateID(update['update_id'])
+
+            database.insertNewItem(_dict, Constants.TABLE_UPDATES)
+            database.saveDatabase()
