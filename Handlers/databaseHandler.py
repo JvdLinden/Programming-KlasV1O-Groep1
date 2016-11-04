@@ -1,5 +1,5 @@
 import sqlite3
-from ProjectData import Constants
+from ProjectData import constants
 
 class DatabaseHandler(object):
     """This is the DatabaseHandler class.

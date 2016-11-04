@@ -1,9 +1,9 @@
-import AlgemeneInfo
+import algemeneInfo
 import tkinter
 from Handlers import combinedHandler
-from ProjectData import Constants
+from ProjectData import constants
 import registration
-import personal_info
+import personalInfo
 import stallen
 import ophalen
 
@@ -67,7 +67,7 @@ class GUI(object):
         self.buttonInfo = tkinter.Button(
             master=self.root,
             text='Algemene Informatie',
-            command=AlgemeneInfo.algemeneInfo,
+            command=algemeneInfo.algemeneInfo,
             width=17,
             pady=8
         )
@@ -80,7 +80,7 @@ class GUI(object):
             text='Persoonlijke Informatie',
             width=17,
             pady=8,
-            command=lambda:  personal_info.PersonalInfo(self.myCombinedHandler, self.root)
+            command=lambda:  personalInfo.PersonalInfo(self.myCombinedHandler, self.root)
         )
         self.buttonPersonalInfo.grid(row=5)
 
@@ -90,7 +90,7 @@ class GUI(object):
     def stop(self):
         self.root.destroy()
 
-ch = combinedHandler.CombinedHandler(Constants.DATABASE_SHARED, Constants.BOT_TOKEN)
+ch = combinedHandler.CombinedHandler(constants.DATABASE_SHARED, constants.BOT_TOKEN)
 screen = GUI(ch)
 screen.start()
 

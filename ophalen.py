@@ -1,7 +1,7 @@
 from userValidator import UserValidator
 import tkinter
 from tkinter import messagebox
-from ProjectData import Constants
+from ProjectData import constants
 
 
 class Ophalen(object):
@@ -45,7 +45,7 @@ class Ophalen(object):
 
             button = tkinter.Button(
                 self.root,
-                text=Constants.BACK,
+                text=constants.BACK,
                 command=self.stop
             )
             button.grid(row=1)
