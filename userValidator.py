@@ -111,7 +111,7 @@ class UserValidator(object):
         self.__combinedHandler = combinedHandler
 
         self._screenRoot = tkinter.Toplevel(master)
-        self._screenRoot.title('Fiets stallen')
+        self._screenRoot.title('Validatie')
 
 
         # Label toeveogen aan het popup scherm
