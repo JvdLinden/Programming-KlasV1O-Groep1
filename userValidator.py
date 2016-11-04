@@ -131,11 +131,10 @@ class UserValidator(object):
 
         # Voeg een button toe aan het pop-up scherm
         # de gebruiker kan hier mee aangeven dat hij de code heeft ingevoerd
-        _buttonConfirmCodeText = 'Gereed'
 
         self._buttonConfirmCode = tkinter.Button(
             master=self._screenRoot,
-            text=_buttonConfirmCodeText,
+            text=Constants.SUBMIT,
             command=self.handleButtonClick
         )
         self._buttonConfirmCode.grid(row=2)

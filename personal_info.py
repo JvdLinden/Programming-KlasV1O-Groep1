@@ -45,5 +45,5 @@ class PersonalInfo(object):
             phoneNrLabel = Label(master=personalInfoWindow, text='Tel.Nr.: %s' % userInfo[Info.PHONE_NR]).grid(row=4, sticky=W)
             bikeKeyLabel = Label(master=personalInfoWindow, text='Pers.Code: %s' % userInfo[Info.BIKE_KEY]).grid(row=5, sticky=W)
 
-            backButton = Button(master=personalInfoWindow, text='Gereed', command=personalInfoWindow.destroy).grid(column=1)
+            backButton = Button(master=personalInfoWindow, text=Constants.BACK, command=personalInfoWindow.destroy).grid(column=1)
 
