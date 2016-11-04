@@ -1,6 +1,6 @@
 from userValidator import UserValidator
 import tkinter
-
+from ProjectData import Constants
 
 class Stallen(object):
 
@@ -24,7 +24,7 @@ class Stallen(object):
         label = tkinter.Label(self.root, text=_stalResult)
         label.grid(row=0)
 
-        button = tkinter.Button(self.root, text='Oke', command=self.stop)
+        button = tkinter.Button(self.root, text=Constants.BACK, command=self.stop)
         button.grid(row=1)
 
         self.running = True

@@ -72,7 +72,7 @@ class RegistrationForm(object):
         # When the submit button is clicked, entries are checked for validity.
         self.submitButton = tkinter.Button(
             self.registrationWindow,
-            text="submit",
+            text=Constants.SUBMIT,
             command=lambda: self.checkEntries(userDict)
         )
         self.submitButton.grid(row=5, column=1, sticky=tkinter.E)
@@ -131,7 +131,7 @@ class RegistrationForm(object):
         subWindow.lift()
 
         incorrectLabel = tkinter.Label(subWindow, text="De invoer is incorrect. Voer uw %s in." % incorrect_entry)
-        ok_button = tkinter.Button(subWindow, text="OK", command=subWindow.destroy)
+        ok_button = tkinter.Button(subWindow, text=Constants.BACK, command=subWindow.destroy)
         incorrectLabel.pack()
         ok_button.pack()
 
