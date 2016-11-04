@@ -1,11 +1,12 @@
 from userValidator import UserValidator
 from ProjectData import constants
-from Handlers import databaseHandler, combinedHandler, telegramHandler
 from tkinter import *
-from enum import Enum
 
 
-class Info:  # Class specifying in what order the information during registration is processed
+class Info:
+    """
+        Class specifying in what order the information during registration is processed
+    """
     ID = 0
     NAME = 1
     STREET = 2
@@ -16,20 +17,21 @@ class Info:  # Class specifying in what order the information during registratio
     CHAT_ID = 7
     BIKE_KEY = 8
 
+
 class PersonalInfo(object):
-    def __init__(self, cb, master):
+    def __init__(self, combinedHandler, master):
         """
         Create GUI for personal information after validation
 
         :return: Returns a GUI Screen
         """
-        usval = UserValidator(cb, master)
-        _user = usval.getValue()
-        del usval
+        theUserValidator = UserValidator(combinedHandler, master)
+        _user = theUserValidator.getValue()
+        del theUserValidator
         if not _user:
             return
         else:
-            userInfo = cb.retrievePersonalData(_user)[0]  # Return value of retrievePersonalData is a list containing
+            userInfo = combinedHandler.retrievePersonalData(_user)[0]  # Return value of retrievePersonalData is a list containing
             # a tuple containing user info in order specified in Info enum
             # Create a windows to show personal information
             personalInfoWindow = Tk()
