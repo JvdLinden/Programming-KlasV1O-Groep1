@@ -104,7 +104,7 @@ class CombinedHandler(object):
         :param bikeKey: the special
         :return: the data in a tuple
         """
-        _sql = "SELECT * FROM {} WHERE bike_id LIKE '%{}%'".format(Constants.TABLE_USERS, bikeKey)
+        _sql = "SELECT * FROM {} WHERE bike_key LIKE '%{}%'".format(Constants.TABLE_USERS, bikeKey)
         _result = self.database.runQuery(_sql)
         if _result:
             return _result

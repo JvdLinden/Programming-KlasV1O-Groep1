@@ -44,12 +44,14 @@ def personal_info_screen(cb):
     # Text om head of page
     name_label = Label(master=personal_info_window, text='Persoonlijke code: ').grid(row=0)
 
-    personalcodeEntry = Entry(master=personal_info_window,).grid(column=1)
-    submitButton = Button(master=personal_info_window, text='Gereed', command=lambda :GetPersonalCode(personalcodeEntry, cb)).grid(column=2)
+    personalcodeEntry = Entry(master=personal_info_window,)
+    personalcodeEntry.grid(row=1)
+    submitButton = Button(master=personal_info_window, text='Gereed', command=lambda :GetPersonalCode(personal_info_window, personalcodeEntry, cb)).grid(column=2)
     # ToDo : Add personal info from Database
 
 
-def GetPersonalCode(entry, cb):
-     cb.retrievePersonalData(entry.get())
-
+def GetPersonalCode(window, personalcodeEntry, cb):
+     _result = cb.retrievePersonalData(personalcodeEntry.get())
+     lab = Label(master=window, text=_result)
+     lab.grid(row=2)
 
