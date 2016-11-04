@@ -74,15 +74,16 @@ class TelegramHandler(object):
         :return: Boolean (True or False)
         """
         _newUpdate = self.bot.getUpdates(self.current_response+1, limit=1, timeout=2)
-        if len(_newUpdate) > 0:
-            return True
-        return False
+        return len(_newUpdate) > 0
 
-    #
+    def registerUpdateID(self, updateId):
+        """registers an update's id t the telegramHandler.
 
-    def registerUpdateID(self, id):
-        if id > self.current_response:
-            self.current_response = id
+        :param updateId: the id of the update that should be registered
+        :return: nothing
+        """
+        if updateId > self.current_response:
+            self.current_response = updateId
 
     def generateRegisterMessageFromKey(self, userKey):
         """Generate a message to display to the user.
@@ -97,76 +98,3 @@ class TelegramHandler(object):
         _finalString += 'Bericht: {}\n'.format(_code)
 
         return _code, _finalString
-
-    def handleUpdates(self, database):
-        """Verwerkt nieuwe updates in de database.
-
-        :param database: de database waarin de updates moeten worden opgeslagen
-        :return: nothing
-        """
-        # zorgen dat de code stop wanneer er niets te verwerken valt
-        if self.hasNewUpdates():
-            updates = self.getNewUpdates()
-
-            for update in updates:
-                self.storeUpdate(update, database)
-
-    def storeUpdate(self, update, database):
-
-        if not database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(constants.TABLE_USERS, update['update_id'])):
-            message = update['message']
-            chat = message['chat']
-            from_user = message['from']
-
-            _dict = {
-                'name': from_user['first_name'] + '' + from_user['last_name'],
-                'chat_id': chat['id'],
-                'date': message['date'],
-                'user_id': from_user['id'],
-                'text': message['text'],
-                'update_id': update['update_id'],
-            }
-
-            self.registerUpdateID(update['update_id'])
-
-            database.insertNewItem(_dict, constants.TABLE_UPDATES)
-            database.saveDatabase()
-
-# --- OLD CODE ---
-    # def handleUpdates(self, updates):
-    #     """Handles all updates, and returns a list of dicts with update data
-    #
-    #     """
-    #     _list = []
-    #     for update in updates:
-    #         _list += [self.handleUpdate(update)]
-    #     return _list
-    #
-    # def handleUpdate(self, update):
-    #     """Handles a single update
-    #
-    #     This is currently a test function, as we still have to vdevelop a format for passing and receiving codes.
-    #     """
-    #     if not update:
-    #         return {}
-    #
-    #     update_id = update['update_id']
-    #
-    #     if self.current_response < update_id:
-    #         self.current_response = update_id
-    #
-    #     code = None
-    #     message = update['message']
-    #     text = message['text']
-    #
-    #     if text.startswith(Constants.CODE_HEADER_REGISTER):
-    #         code = text.strip(Constants.CODE_HEADER_REGISTER).split()[0]
-    #
-    #     chat_id = message['chat']['id']
-    #
-    #     return {
-    #         'code': code,
-    #         'id': chat_id,
-    #         'uid': update_id,
-    #         'text': text
-    #     }
