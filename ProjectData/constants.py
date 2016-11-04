@@ -1,5 +1,5 @@
 # DATABASE
-DATABASE_SHARED = '/ProjectData/sharedDB.db'
+DATABASE_SHARED = 'ProjectData/sharedDB.db'
 
 TABLE_USERS = 'users'
 TABLE_ENTRIES = 'entries'

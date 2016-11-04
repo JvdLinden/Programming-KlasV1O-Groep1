@@ -12,7 +12,7 @@ def string(gui_input):
     :param gui_input: the input string, taken from the gui.
     :return: boolean of whether or not the string matches the regex.
     """
-    return re.match("[a-zA-Z.' ]+", gui_input)
+    return re.match("^[a-zA-Z.' ]+$", gui_input)
 
 
 def huisNr(gui_input):
@@ -21,7 +21,7 @@ def huisNr(gui_input):
     :param gui_input: the input string, taken from the gui.
     :return: boolean of whether or not the string matches the regex.
     """
-    return re.match("\d+", gui_input)
+    return re.match("^\d+$", gui_input)
 
 
 def postcode(gui_input):
@@ -31,7 +31,7 @@ def postcode(gui_input):
     :param gui_input: the input string, taken from the gui.
     :return: boolean of whether or not the string matches the regex.
     """
-    return re.match("\d{4}\s?\w{2}", gui_input)
+    return re.match("^\d{4}\s?\w{2}$", gui_input)
 
 
 def telNr(gui_input):
@@ -40,7 +40,7 @@ def telNr(gui_input):
     :param gui_input: the input string, taken from the gui.
     :return: boolean of whether or not the string matches the regex.
     """
-    return re.match("06-\d{8}$", gui_input)
+    return re.match("^06-\d{8}$", gui_input)
 
 
 # A class enumerating the different types of generatable codes. Used for clairvoyance in code.

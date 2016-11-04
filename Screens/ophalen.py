@@ -1,6 +1,5 @@
 import tkinter
 from tkinter import messagebox
-
 from ProjectData import constants
 from Validation.userValidator import UserValidator
 

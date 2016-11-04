@@ -1,7 +1,9 @@
-from Validation.userValidator import UserValidator
 import tkinter
 from tkinter import messagebox
+
 from ProjectData import constants
+from Validation.userValidator import UserValidator
+
 
 class Stallen(object):
     """The Stallen-object handles all the processen related to retrieving a bike

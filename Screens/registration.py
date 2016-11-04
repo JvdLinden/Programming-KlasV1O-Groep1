@@ -3,9 +3,9 @@ import tkinter
 from enum import Enum
 from tkinter import messagebox
 
-from Validation import validate
 from ProjectData import constants, messages
 from Screens.specialPopUp import SpecialPopUp
+from Validation import validate
 
 
 class Info(Enum):  # Class specifying in what order the information during registration is processed
@@ -18,12 +18,15 @@ class Info(Enum):  # Class specifying in what order the information during regis
 
 class RegistrationForm(object):
     """
-        Class which creates a new Window to register a user. It contains 5 labels and entries, namely
-        name, street, house number, postal code and phone number. 
+        Class which creates a new Window to register a user.
     """
     def __init__(self, myCombinedHandler):
         """
-        The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
+        The window contains 5 labels and entries, namely name, street, house number, postal code and phone number.
+        If the user enters any one of those wrongly he gets a pop-up explaining which field to edit.
+        If the user enters his information correctly, we are given a pop-up containing a registration code.
+        Sending this to the Telegram bot will unlock Telegram authentication for your phone,
+        and a personal code will be created. This personal code is used for access throughout the program.
         :return: none
         """
         self.myCombinedHandler = myCombinedHandler

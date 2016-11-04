@@ -1,6 +1,7 @@
-from Validation.userValidator import UserValidator
-from ProjectData import constants
 from tkinter import *
+
+from ProjectData import constants
+from Validation.userValidator import UserValidator
 
 
 class Info:

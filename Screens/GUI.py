@@ -1,9 +1,7 @@
 import tkinter
-    
-from Screens import algemeneInfo, personalInfo, registration, stallen
+from Screens import personalInfo, registration, stallen, algemeneInfo, ophalen
 from Handlers import combinedHandler
 from ProjectData import constants
-from Screens import ophalen
 
 
 class GUI(object):
@@ -88,10 +86,8 @@ class GUI(object):
     def stop(self):
         self.root.destroy()
 
-ch = combinedHandler.CombinedHandler(constants.DATABASE_SHARED, constants.BOT_TOKEN)
-screen = GUI(ch)
-screen.start()
-
-
-
-
+# start application
+def startApplication():
+    myCombinedHandler = combinedHandler.CombinedHandler(constants.DATABASE_SHARED, constants.BOT_TOKEN)
+    screen = GUI(myCombinedHandler)
+    screen.start()
