@@ -34,8 +34,7 @@ class CombinedHandler(object):
         _sql = "SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_UPDATES, update['update_id'])
         _result = self.database.runQuery(_sql)
 
-
-        if not _result:
+        if len(_result) == 0:
             # if there are no results, insert a new row into the database
             message = update['message']
             chat = message['chat']
@@ -123,7 +122,6 @@ class CombinedHandler(object):
                 {'bike_key': bike_key, 'date_stored': str(time.strftime('%x %X'))},
                 Constants.TABLE_ENTRIES
             )
-            print('RESULT storeBike >> {}'.format( _result))
             _user = self.database.getChatIDFromPersonalCode(bike_key)
             _message = "Uw fiets is gestald!\n - Uw Fietsenstalling beheerder"
             self.telegram.sendMessageToUser(_user, _message)

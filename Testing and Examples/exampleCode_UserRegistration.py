@@ -59,78 +59,80 @@ while loopIsRunning:
         # 1. A new user registers to our bot
         # 2. An exicsting user enters a pincode to verify his identity
 
+        tHandler.registerUpdateID(update['update_id'])
+
         pprint(update)
-
-        #extrax=ct the actual message from the update data
-        messageText = update['message']['text']
-
-        # nr 1: The received message must start with 'REGISTER:'
-        if messageText.startswith(HEADER_REGISTER):
-            #extract register code
-            registerCode = messageText.split(':')[1] #We need the substring starting after the ':'
-
-            newItem = {
-                'name': '?',
-                'chat_id': update['message']['chat']['id'],
-                'temp_key': registerCode
-            }
-
-            #add the new registerer to our 'database'
-            result = myDB.insertNewItem(newItem, FAKE_TABLE)
-
-            print(result)
-
-        # nr 2: The received message must start with 'C0D3:'
-        elif messageText.startswith(HEADER_IDENTIFY):
-            #extract the identification code
-            IDCode = messageText.split(':')[1] #We need the substring starting after the ':'
-
-            #add the new identifiaction to our identificationList
-            identificationDict.update({'chat_id': update['update_id'], 'code':IDCode})
-
-        #lazy way to terminate the loop - DO NOT IMPLEMENT THIS!
-        elif messageText.startswith('SHUTDOWN'):
-            loopIsRunning = False
-
-        else:
-            #for now we will not precess anything we don't recognize
-            pass
-
-        if tHandler.current_response < update['update_id']:
-            tHandler.current_response = update['update_id']
-
-    #We now have receveived all new updates and handled them thusfar.
-    #Now we should use our indexed updates.
-
-    print(myDB.showTableContents(FAKE_TABLE))
-
-    #let's, just for fun, send all unregistered users an update to remind them to register
-    sql = "SELECT * FROM fake WHERE name = '?'"
-    result = myDB.runQuery(sql)
-
-    for unregisteredUser in result:
-        #Define the user
-        _recipient = unregisteredUser[2] #Ugly, Hard Coded position in the tuple
-
-        #Define the message to send
-        _message = "Hi, you have not yet finished your registration. Please do this A.S.A.P.!"
-
-        #try to send the message and save the result (Either an error or a full messageDict)
-        _result = tHandler.sendMessageToUser(_recipient, _message)
-
-        print('RESULT: {}'.format(_result))
-
-
-    #Save the database to ensure no data is lost on a sudden crash
-    myDB.saveDatabase()
-
-    #avoid updating too quickly!
-    print('sleepy time... ')
-
-    sleepTimeSeconds = 5
-    time.sleep(sleepTimeSeconds) #sleep for 5 seconds
-    print('waking up after {} seconds...'.format(sleepTimeSeconds))
-
-
-#This will ensure that all data is saved to the Database
-del myDB
+#
+#         #extrax=ct the actual message from the update data
+#         messageText = update['message']['text']
+#
+#         # nr 1: The received message must start with 'REGISTER:'
+#         if messageText.startswith(HEADER_REGISTER):
+#             #extract register code
+#             registerCode = messageText.split(':')[1] #We need the substring starting after the ':'
+#
+#             newItem = {
+#                 'name': '?',
+#                 'chat_id': update['message']['chat']['id'],
+#                 'temp_key': registerCode
+#             }
+#
+#             #add the new registerer to our 'database'
+#             result = myDB.insertNewItem(newItem, FAKE_TABLE)
+#
+#             print(result)
+#
+#         # nr 2: The received message must start with 'C0D3:'
+#         elif messageText.startswith(HEADER_IDENTIFY):
+#             #extract the identification code
+#             IDCode = messageText.split(':')[1] #We need the substring starting after the ':'
+#
+#             #add the new identifiaction to our identificationList
+#             identificationDict.update({'chat_id': update['update_id'], 'code':IDCode})
+#
+#         #lazy way to terminate the loop - DO NOT IMPLEMENT THIS!
+#         elif messageText.startswith('SHUTDOWN'):
+#             loopIsRunning = False
+#
+#         else:
+#             #for now we will not precess anything we don't recognize
+#             pass
+#
+#         if tHandler.current_response < update['update_id']:
+#             tHandler.current_response = update['update_id']
+#
+#     #We now have receveived all new updates and handled them thusfar.
+#     #Now we should use our indexed updates.
+#
+#     print(myDB.showTableContents(FAKE_TABLE))
+#
+#     #let's, just for fun, send all unregistered users an update to remind them to register
+#     sql = "SELECT * FROM fake WHERE name = '?'"
+#     result = myDB.runQuery(sql)
+#
+#     for unregisteredUser in result:
+#         #Define the user
+#         _recipient = unregisteredUser[2] #Ugly, Hard Coded position in the tuple
+#
+#         #Define the message to send
+#         _message = "Hi, you have not yet finished your registration. Please do this A.S.A.P.!"
+#
+#         #try to send the message and save the result (Either an error or a full messageDict)
+#         _result = tHandler.sendMessageToUser(_recipient, _message)
+#
+#         print('RESULT: {}'.format(_result))
+#
+#
+#     #Save the database to ensure no data is lost on a sudden crash
+#     myDB.saveDatabase()
+#
+#     #avoid updating too quickly!
+#     print('sleepy time... ')
+#
+#     sleepTimeSeconds = 5
+#     time.sleep(sleepTimeSeconds) #sleep for 5 seconds
+#     print('waking up after {} seconds...'.format(sleepTimeSeconds))
+#
+#
+# #This will ensure that all data is saved to the Database
+# del myDB
