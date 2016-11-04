@@ -196,7 +196,7 @@ class RegistrationForm(object):
 
                 SpecialPopUp(self.registrationWindow,
                              "Geregistreerd",
-                             Messages.GEREGISTREERD,
+                             Messages.GEREGISTREERD_POPUP,
                              userDict['bike_key']
                              )
                 _message =  Messages.GEREGISTREERD_TELEGRAM.format(userDict['bike_key'])
