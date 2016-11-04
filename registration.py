@@ -2,9 +2,8 @@ import Validate
 import tkinter
 import time
 from enum import Enum
-from ProjectData import Constants
+from ProjectData import Constants, Messages
 from tkinter import messagebox
-from Handlers import combinedHandler
 from specialPopUp import SpecialPopUp
 
 
@@ -114,7 +113,7 @@ class RegistrationForm(object):
         """
 
         SpecialPopUp(self.registrationWindow,
-                     "Title",
+                     "Registreren",
                      "Stuur het volgende Telegram-bericht naar %s op Telegram." % Constants.BOT_NAME,
                      "\n%s\n" % registration_code
         )
@@ -196,15 +195,13 @@ class RegistrationForm(object):
 
 
                 SpecialPopUp(self.registrationWindow,
-                             "Title",
-                             "U bent Geregistreerd!\nHieronder volgt uw persoonlijke code, bewaar deze goed!",
+                             "Geregistreerd",
+                             Messages.GEREGISTREERD,
                              userDict['bike_key']
                              )
-                _message = 'U bent geregistreerd bij onze fitesenstalling. \n' \
-                           'Hieronder vind u uw persoonlijke toegangscode, bewaarde deze goed!\n' \
-                           '' + userDict['bike_key']
+                _message =  Messages.GEREGISTREERD_TELEGRAM.format(userDict['bike_key'])
 
                 self.myCombinedHandler.telegram.sendMessageToUser(_chatId, _message)
             else:
-                messagebox.showinfo("TIME OUT", "De registratie is op dit moment niet gelukt, probeer het later nog eens.")
+                messagebox.showinfo("TIME OUT", Messages.REGISTRATIE_TIMEOUT)
             self.registrationWindow.destroy()

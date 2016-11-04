@@ -1,4 +1,4 @@
-from ProjectData import Constants
+from ProjectData import Constants, Messages
 from Handlers import telegramHandler, databaseHandler
 import time
 
@@ -41,8 +41,16 @@ class CombinedHandler(object):
             from_user = message['from']
 
             # create a dict, the databaseHandler can convert a dict into an sql-Insert query
+
+            _name = from_user['first_name']
+            # Check if there is a last name available
+            try:
+                _name += from_user['last_name']
+            except:
+                pass  # As there is no last_name in the update, we will ignore it
+
             _dict = {
-                'name': from_user['first_name'] + '' + from_user['last_name'],
+                'name': _name,
                 'chat_id': chat['id'],
                 'date': message['date'],
                 'user_id': from_user['id'],
@@ -123,8 +131,7 @@ class CombinedHandler(object):
                 Constants.TABLE_ENTRIES
             )
             _user = self.database.getChatIDFromPersonalCode(bike_key)
-            _message = "Uw fiets is gestald!\n - Uw Fietsenstalling beheerder"
-            self.telegram.sendMessageToUser(_user, _message)
+            self.telegram.sendMessageToUser(_user, Messages.FIETS_GESTALD)
             return 'U heeft uw fiets gestald'
 
     def retrieveBike(self, bike_key):
@@ -143,8 +150,7 @@ class CombinedHandler(object):
 
     def sendBikeRetreivedMessage(self, bike_key):
         _user = self.database.getChatIDFromPersonalCode(bike_key)
-        _message = "U heeft uw fiets opgehaald!\n - Uw Fietsenstalling beheerder"
-        self.telegram.sendMessageToUser(_user, _message)
+        self.telegram.sendMessageToUser(_user, Messages.FIETS_OPGEHAALD)
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*
