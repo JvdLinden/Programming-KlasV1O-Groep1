@@ -80,7 +80,7 @@ class GUI(object):
             text='Persoonlijke Informatie',
             width=17,
             pady=8,
-            command=lambda:  personal_info.personal_info_screen(self.myCombinedHandler)
+            command=lambda:  personal_info.PersonalInfo(self.myCombinedHandler, self.root)
         )
         self.buttonPersonalInfo.grid(row=5)
 
