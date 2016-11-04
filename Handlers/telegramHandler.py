@@ -1,7 +1,7 @@
 import telepot
 import string
 import random
-from ProjectData import Constants
+from ProjectData import constants
 
 
 class TelegramHandler(object):
@@ -41,7 +41,7 @@ class TelegramHandler(object):
         :param chatID: the chat ID related to the user we want to message
         :return: the code sent to the user
         """
-        _code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(Constants.LENGTH_PERSONAL_CODE))
+        _code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(constants.LENGTH_PERSONAL_CODE))
 
         _message = "Beste gebruiker, hierbij de bevestigingscode die u moet ingeven.\n\nUw Code is: {}".format(_code)
 
@@ -92,8 +92,8 @@ class TelegramHandler(object):
         :return: (registrationkey), (displayString)
         """
         _finalString = 'Bedankt voor uw registratie!\n Om uw registratie succesvol af te ronden moet u geistreren bij onze telegrambot.\n'
-        _finalString += 'Bot: {}\n'.format(Constants.BOT_NAME)
-        _code = Constants.CODE_HEADER_REGISTER + userKey
+        _finalString += 'Bot: {}\n'.format(constants.BOT_NAME)
+        _code = constants.CODE_HEADER_REGISTER + userKey
         _finalString += 'Bericht: {}\n'.format(_code)
 
         return _code, _finalString
@@ -113,7 +113,7 @@ class TelegramHandler(object):
 
     def storeUpdate(self, update, database):
 
-        if not database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_USERS, update['update_id'])):
+        if not database.runQuery("SELECT * FROM {} WHERE update_id = {} ".format(constants.TABLE_USERS, update['update_id'])):
             message = update['message']
             chat = message['chat']
             from_user = message['from']
@@ -129,7 +129,7 @@ class TelegramHandler(object):
 
             self.registerUpdateID(update['update_id'])
 
-            database.insertNewItem(_dict, Constants.TABLE_UPDATES)
+            database.insertNewItem(_dict, constants.TABLE_UPDATES)
             database.saveDatabase()
 
 # --- OLD CODE ---

@@ -1,8 +1,8 @@
-import Validate
+import validate
 import tkinter
 import time
 from enum import Enum
-from ProjectData import Constants, Messages
+from ProjectData import constants, messages
 from tkinter import messagebox
 from specialPopUp import SpecialPopUp
 
@@ -74,7 +74,7 @@ class RegistrationForm(object):
         # When the submit button is clicked, entries are checked for validity.
         self.submitButton = tkinter.Button(
             self.registrationWindow,
-            text=Constants.SUBMIT,
+            text=constants.SUBMIT,
             command=lambda: self.checkEntries(userDict)
         )
         self.submitButton.grid(row=5, column=1, sticky=tkinter.E)
@@ -91,7 +91,7 @@ class RegistrationForm(object):
 
         :return: the confirmation code.
         """
-        return Validate.makeRandomCode(Constants.LENGTH_RANDOM_CONFIRMATION_CODE, Validate.CodeType.ALL)
+        return validate.makeRandomCode(constants.LENGTH_RANDOM_CONFIRMATION_CODE, validate.CodeType.ALL)
 
     # todo Dit invullen
     def createBikeCode(self):
@@ -99,14 +99,14 @@ class RegistrationForm(object):
 
         :return:
         """
-        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.ALL)
+        return validate.makeRandomCode(constants.LENGTH_PERSONAL_CODE, validate.CodeType.ALL)
 
     def randomID(self):
         """Creates an identification code to be printed on the sticker stuck to the bike.
 
         :return: the identification code.
         """
-        return Validate.makeRandomCode(Constants.LENGTH_PERSONAL_CODE, Validate.CodeType.DIGITS)
+        return validate.makeRandomCode(constants.LENGTH_PERSONAL_CODE, validate.CodeType.DIGITS)
 
     def subPersonalCode(self, registration_code):
         """
@@ -117,9 +117,9 @@ class RegistrationForm(object):
 
         SpecialPopUp(self.registrationWindow,
                      "Registreren",
-                     "Stuur het volgende Telegram-bericht naar %s op Telegram." % Constants.BOT_NAME,
+                     "Stuur het volgende Telegram-bericht naar %s op Telegram." % constants.BOT_NAME,
                      "\n%s\n" % registration_code
-        )
+                     )
 
 
     def subIncorrectData(self, incorrect_entry):
@@ -133,7 +133,7 @@ class RegistrationForm(object):
         subWindow.lift()
 
         incorrectLabel = tkinter.Label(subWindow, text="De invoer is incorrect. Voer uw %s in." % incorrect_entry)
-        ok_button = tkinter.Button(subWindow, text=Constants.BACK, command=subWindow.destroy)
+        ok_button = tkinter.Button(subWindow, text=constants.BACK, command=subWindow.destroy)
         incorrectLabel.pack()
         ok_button.pack()
 
@@ -152,15 +152,15 @@ class RegistrationForm(object):
 
         # Here we start validating our data. Using this construction means we don't validate the rest of the data if,
         # for example, the first variable is invalid. Instead it immediately jumps to a pop-up stating which entry is wrong.
-        if not Validate.string(name):
+        if not validate.string(name):
             self.subIncorrectData('naam')
-        elif not Validate.string(street):
+        elif not validate.string(street):
             self.subIncorrectData('straat')
-        elif not Validate.huisNr(houseNumber):
+        elif not validate.huisNr(houseNumber):
             self.subIncorrectData('huisnummer')
-        elif not Validate.postcode(postalCode):
+        elif not validate.postcode(postalCode):
             self.subIncorrectData('postcode')
-        elif not Validate.telNr(phoneNumber):
+        elif not validate.telNr(phoneNumber):
             self.subIncorrectData('telefoonnummer')
         else:
             # With our data being valid we start a pop-up containing a security code to send to Telegram.
@@ -184,9 +184,9 @@ class RegistrationForm(object):
             _chatId = self.myCombinedHandler.getChatIdViaRegistrationKeyInLoggedUpdates(registrationCode)
             _count = 0
             while not _chatId:
-                time.sleep(Constants.REGISTRATION_WAIT)
+                time.sleep(constants.REGISTRATION_WAIT)
                 _count += 1
-                if _count > Constants.REGISTRATION_TIMEOUT:
+                if _count > constants.REGISTRATION_TIMEOUT:
                     break
 
                 self.myCombinedHandler.handleUpdates()
@@ -199,12 +199,12 @@ class RegistrationForm(object):
 
                 SpecialPopUp(self.registrationWindow,
                              "Geregistreerd",
-                             Messages.GEREGISTREERD_POPUP,
+                             messages.GEREGISTREERD_POPUP,
                              userDict['bike_key']
                              )
-                _message =  Messages.GEREGISTREERD_TELEGRAM.format(userDict['bike_key'])
+                _message =  messages.GEREGISTREERD_TELEGRAM.format(userDict['bike_key'])
 
                 self.myCombinedHandler.telegram.sendMessageToUser(_chatId, _message)
             else:
-                messagebox.showinfo("TIME OUT", Messages.REGISTRATIE_TIMEOUT)
+                messagebox.showinfo("TIME OUT", messages.REGISTRATIE_TIMEOUT)
             self.registrationWindow.destroy()

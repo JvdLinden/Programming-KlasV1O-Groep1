@@ -1,4 +1,4 @@
-from ProjectData import Constants, Messages
+from ProjectData import constants, messages
 from Handlers import telegramHandler, databaseHandler
 import time
 
@@ -33,7 +33,7 @@ class CombinedHandler(object):
         """
 
         # check for duplicates via de update_id number
-        _sql = "SELECT * FROM {} WHERE update_id = {} ".format(Constants.TABLE_UPDATES, update['update_id'])
+        _sql = "SELECT * FROM {} WHERE update_id = {} ".format(constants.TABLE_UPDATES, update['update_id'])
         _result = self.database.runQuery(_sql)
 
         if len(_result) == 0:
@@ -63,7 +63,7 @@ class CombinedHandler(object):
             #register the new updateId to the telegramHandler object
             self.telegram.registerUpdateID(update['update_id'])
 
-            _result = self.database.insertNewItem(_dict, Constants.TABLE_UPDATES)
+            _result = self.database.insertNewItem(_dict, constants.TABLE_UPDATES)
             self.database.saveDatabase()
 
     def registerChatIdToUserViaRegKey(self, regKey, chatID):
@@ -74,7 +74,7 @@ class CombinedHandler(object):
         :param chatID: the chatID of the user
         :return: nothing
         """
-        _sql = "UPDATE {} SET chat_id = {}, reg_key = '' WHERE reg_key = '{}'".format(Constants.TABLE_USERS, chatID, regKey)
+        _sql = "UPDATE {} SET chat_id = {}, reg_key = '' WHERE reg_key = '{}'".format(constants.TABLE_USERS, chatID, regKey)
         _result = self.database.runQuery(_sql)
         self.database.saveDatabase()
         return _result
@@ -85,11 +85,11 @@ class CombinedHandler(object):
         :param registrationKey:
         :return: the chat_id linked to this registrationKey, False if no key was found
         """
-        _result = self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, registrationKey))
+        _result = self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(constants.TABLE_UPDATES, registrationKey))
 
         if _result:
             # list the update from which we retrieved the data as 'used' in the database.
-            self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(Constants.TABLE_UPDATES, registrationKey))
+            self.database.runQuery("UPDATE {} SET used = 1 WHERE text = '{}'".format(constants.TABLE_UPDATES, registrationKey))
 
             # sqlite database returns a list with tuples containing row data (tuples in list).
             #  we only expect 1 answer so we need the item on position 0 of the first list and position 0 of the tuple in said list
@@ -103,7 +103,7 @@ class CombinedHandler(object):
         :param key: the key to find
         :return: True if found, False if not
         """
-        if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(Constants.TABLE_UPDATES, key)):
+        if self.database.runQuery("SELECT chat_id FROM {} WHERE text = '{}' AND used = 0".format(constants.TABLE_UPDATES, key)):
             return True
         return False
 
@@ -113,7 +113,7 @@ class CombinedHandler(object):
         :param bikeKey: the special
         :return: the data in a tuple
         """
-        _sql = "SELECT * FROM {} WHERE bike_key LIKE '%{}%'".format(Constants.TABLE_USERS, bikeKey)
+        _sql = "SELECT * FROM {} WHERE bike_key LIKE '%{}%'".format(constants.TABLE_USERS, bikeKey)
         _result = self.database.runQuery(_sql)
         if _result:
             return _result
@@ -122,7 +122,7 @@ class CombinedHandler(object):
 
     def storeBike(self, bike_key):
         # check if bike isn't already stalled
-        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved = 0".format(Constants.TABLE_ENTRIES, bike_key)
+        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved = 0".format(constants.TABLE_ENTRIES, bike_key)
         _result = self.database.runQuery(_sql)
         # actual check
         pprint(_result)
@@ -132,19 +132,19 @@ class CombinedHandler(object):
         else:
             _result = self.database.insertNewItem(
                 {'bike_key': bike_key, 'date_stored': str(time.strftime('%x %X'))},
-                Constants.TABLE_ENTRIES
+                constants.TABLE_ENTRIES
             )
             _user = self.database.getChatIDFromPersonalCode(bike_key)
-            self.telegram.sendMessageToUser(_user, Messages.FIETS_GESTALD)
+            self.telegram.sendMessageToUser(_user, messages.FIETS_GESTALD)
             return 'U heeft uw fiets gestald'
 
     def retrieveBike(self, bike_key):
-        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES, bike_key)
+        _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved=0".format(constants.TABLE_ENTRIES, bike_key)
         _result = self.database.runQuery(_sql)
         self.database.saveDatabase()
         print('RESULT retr >> {}'.format(_result))
         if len(_result) > 0:
-            _sql = "UPDATE {} SET retrieved=1, date_retrieved='{}' WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES,time.strftime('%x %X'),  bike_key)
+            _sql = "UPDATE {} SET retrieved=1, date_retrieved='{}' WHERE bike_key = '{}' and retrieved=0".format(constants.TABLE_ENTRIES, time.strftime('%x %X'), bike_key)
             _result = self.database.runQuery(_sql)
             self.database.saveDatabase()
             self.sendBikeRetreivedMessage(bike_key)
@@ -154,7 +154,7 @@ class CombinedHandler(object):
 
     def sendBikeRetreivedMessage(self, bike_key):
         _user = self.database.getChatIDFromPersonalCode(bike_key)
-        self.telegram.sendMessageToUser(_user, Messages.FIETS_OPGEHAALD)
+        self.telegram.sendMessageToUser(_user, messages.FIETS_OPGEHAALD)
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*
@@ -172,6 +172,6 @@ class CombinedHandler(object):
         :param userData: required user data
         :return: True (succes), False (failure)
         """
-        _result = self.database.insertNewItem(userData, Constants.TABLE_USERS)
+        _result = self.database.insertNewItem(userData, constants.TABLE_USERS)
         self.database.saveDatabase()
         return _result

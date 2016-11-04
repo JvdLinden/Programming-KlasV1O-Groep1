@@ -1,7 +1,7 @@
 from userValidator import UserValidator
 import tkinter
 from tkinter import messagebox
-from ProjectData import Constants
+from ProjectData import constants
 
 class Stallen(object):
     """The Stallen-object handles all the processen related to retrieving a bike
@@ -37,7 +37,7 @@ class Stallen(object):
             label = tkinter.Label(self.root, text=_stalResult)
             label.grid(row=0)
 
-            button = tkinter.Button(self.root, text=Constants.BACK, command=self.stop)
+            button = tkinter.Button(self.root, text=constants.BACK, command=self.stop)
             button.grid(row=1)
 
             self.running = True

@@ -1,6 +1,6 @@
 import tkinter
 from Handlers import DatabaseHandler, telegramHandler
-from ProjectData import Constants
+from ProjectData import constants
 from userValidator import UserValidator
 
 class RetrieveBikePopUp(object):

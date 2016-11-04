@@ -1,6 +1,6 @@
 import tkinter
 from Handlers import telegramHandler
-from ProjectData import Constants
+from ProjectData import constants
 
 
 class UserValidator(object):
@@ -41,7 +41,7 @@ class UserValidator(object):
         :return: nothing
         """
         self.__attempts += 1
-        if self.__attempts >= Constants.MAX_LOGIN_ATTEMPTS:
+        if self.__attempts >= constants.MAX_LOGIN_ATTEMPTS:
             self.foreceStop()
 
         elif self.__hasEnteredValidPersonalCode:
@@ -134,7 +134,7 @@ class UserValidator(object):
 
         self._buttonConfirmCode = tkinter.Button(
             master=self._screenRoot,
-            text=Constants.SUBMIT,
+            text=constants.SUBMIT,
             command=self.handleButtonClick
         )
         self._buttonConfirmCode.grid(row=2)
