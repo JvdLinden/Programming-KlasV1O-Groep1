@@ -15,7 +15,7 @@ class Ophalen(object):
 
         _result = theCombinedHandler.retrieveBike(_user)
 
-        _message = 'Uw fiets word opgehaald' if _result else 'Uw fiets is niet aanwezig!'
+        _message = 'Uw fiets is opgehaald' if _result else 'Uw fiets is niet aanwezig!'
 
         # Create a window to show personal information
         self.root = tkinter.Tk()

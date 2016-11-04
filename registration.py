@@ -62,7 +62,7 @@ class RegistrationForm(object):
         self.phoneNrEntry.insert(tkinter.END, '06-')
         self.phoneNrEntry.grid(row=4, column=1)
 
-        user_dict = {'uid': self.randomID(),
+        userDict = {'uid': self.randomID(),
                      'name': self.nameEntry,
                      'street': self.streetEntry,
                      'house_number': self.houseNrEntry,
@@ -73,7 +73,7 @@ class RegistrationForm(object):
         self.submitButton = tkinter.Button(
             self.registrationWindow,
             text="submit",
-            command=lambda: self.checkEntries(user_dict)
+            command=lambda: self.checkEntries(userDict)
         )
         self.submitButton.grid(row=5, column=1, sticky=tkinter.E)
 
