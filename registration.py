@@ -16,7 +16,10 @@ class Info(Enum):  # Class specifying in what order the information during regis
 
 
 class RegistrationForm(object):
-
+    """
+        Class which creates a new Window to register a user. It contains 5 labels and entries, namely
+        name, street, house number, postal code and phone number. 
+    """
     def __init__(self, myCombinedHandler):
         """
         The window for registration. It contains labels and entries for entering 5 variables, which are passed to a database
