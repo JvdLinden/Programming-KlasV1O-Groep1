@@ -4,15 +4,27 @@ from tkinter import messagebox
 from ProjectData import Constants
 
 class Stallen(object):
+    """The Stallen-object handles all the processen related to retrieving a bike
+
+    """
 
     def stop(self):
+        """Stops the loop, resulting into closing the object
+
+        :return: nothing
+        """
         self.running = False
 
     def __init__(self, theCombinedHandler, master):
+        """Creates an Ophalen-object
+
+        :param theCombinedHandler: the combinedHandler object that is being used in the application
+        :param master: the parent of this screen
+        """
         # validate user
-        usval = UserValidator(theCombinedHandler, master)
-        _user = usval.getValue()
-        del usval
+        theUserValidator = UserValidator(theCombinedHandler, master)
+        _user = theUserValidator.getValue()
+        del theUserValidator
         if _user:
             _stalResult = theCombinedHandler.storeBike(_user)
 
