@@ -2,11 +2,24 @@ import tkinter
 
 
 class SpecialPopUp(object):
+    """This class defines a special pop-up that won't mess with the mainloop.
 
+    """
     def stop(self):
+        """Stops the loop, resulting into closing the object
+
+        :return: nothing
+        """
         self.running = False
 
     def __init__(self, master, title, text, selectableText):
+        """Creates a SpecialPopUp - object.
+
+        :param master: the screen from which the pop-up is called
+        :param title: the title for the pop-up screen
+        :param text: the body of the pop-up
+        :param selectableText: the ext on the pop-up that should be selectable by the user
+        """
         self.root = tkinter.Toplevel(master)
         self.root.title(title)
         lab = tkinter.Label(master=self.root, text=text)
