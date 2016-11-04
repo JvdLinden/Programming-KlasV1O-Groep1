@@ -2,6 +2,8 @@ from ProjectData import Constants, Messages
 from Handlers import telegramHandler, databaseHandler
 import time
 
+from pprint import pprint
+
 class CombinedHandler(object):
     """
         This class van handle all database and telegram operations
@@ -123,7 +125,9 @@ class CombinedHandler(object):
         _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved = 0".format(Constants.TABLE_ENTRIES, bike_key)
         _result = self.database.runQuery(_sql)
         # actual check
-        if _result:
+        pprint(_result)
+        print(len(_result))
+        if len(_result) != 0:
             return 'Uw fiets is al aanwezig in onze stalling'
         else:
             _result = self.database.insertNewItem(
@@ -138,7 +142,7 @@ class CombinedHandler(object):
         _sql = "SELECT * FROM {} WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES, bike_key)
         _result = self.database.runQuery(_sql)
         self.database.saveDatabase()
-
+        print('RESULT retr >> {}'.format(_result))
         if len(_result) > 0:
             _sql = "UPDATE {} SET retrieved=1, date_retrieved='{}' WHERE bike_key = '{}' and retrieved=0".format(Constants.TABLE_ENTRIES,time.strftime('%x %X'),  bike_key)
             _result = self.database.runQuery(_sql)
