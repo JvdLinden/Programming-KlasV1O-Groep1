@@ -1,6 +1,6 @@
-from userValidator import UserValidator
+from Validation.userValidator import UserValidator
 from ProjectData import constants
-from Handlers import databaseHandler, telegramHandler, combinedHandler
+from Handlers import combinedHandler
 
 #create a DatabaseHandler object
 myCH = combinedHandler.CombinedHandler(database=constants.DATABASE_MASK, telegram=constants.BOT_TOKEN)

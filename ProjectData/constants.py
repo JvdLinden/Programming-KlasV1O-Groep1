@@ -1,8 +1,5 @@
 # DATABASE
-DATABASE_MASK = '../applicationDatabase.db'
-DATABASE = 'applicationDatabase.db'
-
-DATABASE_SHARED = 'sharedDB.db'
+DATABASE_SHARED = '/ProjectData/sharedDB.db'
 
 TABLE_USERS = 'users'
 TABLE_ENTRIES = 'entries'
