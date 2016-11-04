@@ -1,4 +1,4 @@
-from ProjectData import Constants
+from ProjectData import Constants, Messages
 from Handlers import telegramHandler, databaseHandler
 import time
 
@@ -123,8 +123,7 @@ class CombinedHandler(object):
                 Constants.TABLE_ENTRIES
             )
             _user = self.database.getChatIDFromPersonalCode(bike_key)
-            _message = "Uw fiets is gestald!\n - Uw Fietsenstalling beheerder"
-            self.telegram.sendMessageToUser(_user, _message)
+            self.telegram.sendMessageToUser(_user, Messages.FIETS_GESTALD)
             return 'U heeft uw fiets gestald'
 
     def retrieveBike(self, bike_key):
@@ -143,8 +142,7 @@ class CombinedHandler(object):
 
     def sendBikeRetreivedMessage(self, bike_key):
         _user = self.database.getChatIDFromPersonalCode(bike_key)
-        _message = "U heeft uw fiets opgehaald!\n - Uw Fietsenstalling beheerder"
-        self.telegram.sendMessageToUser(_user, _message)
+        self.telegram.sendMessageToUser(_user, Messages.FIETS_OPGEHAALD)
 
     def registerNewUser(self, userData):
         """This functions registers a new user, with the given *userData*
